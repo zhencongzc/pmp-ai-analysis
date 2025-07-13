@@ -1,0 +1,14 @@
+server:
+  port: 8081  # 修改端口号
+  servlet:
+    context-path: /pmp-ai-analysis
+spring:
+  application:
+    name: pmp-ai-analysis  # 应用名称
+    driver-class-name: com.mysql.jdbc.Driver
+  # 数据库连接配置
+  datasource:
+    url: jdbc:mysql://localhost:3306/pmp
+    username: root
+    password: root
+
