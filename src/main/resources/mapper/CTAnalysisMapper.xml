@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pmp.domain.mapper.CTAnalysisMapper">
+
+    <!-- 新增患者 -->
+    <insert id="insertPatient" parameterType="com.pmp.domain.entity.Patient">
+        INSERT INTO ct_label_data (id, computer_name, patient_id, label_data, create_time)
+        VALUES (null, #{computerName}, #{patientId}, #{labelData, jdbcType=VARCHAR}, now())
+    </insert>
+
+    <!-- 查询患者 -->
+    <select id="selectPatientById" parameterType="String" resultType="com.pmp.domain.entity.Patient">
+        SELECT computer_name AS computerName,
+               patient_id AS patientId,
+               label_data AS labelData
+        FROM patient_info
+        WHERE patient_id = #{patientId}
+    </select>
+
+</mapper>
