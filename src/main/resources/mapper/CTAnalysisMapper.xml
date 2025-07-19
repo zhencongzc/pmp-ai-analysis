@@ -2,5 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pmp.mapper.CTAnalysisMapper">
 
+    <insert id="insertPatient" parameterType="com.pmp.domain.ct.Patient">
+        INSERT INTO ct_label_data (id, computer_name, patient_id, label_data, create_time)
+        VALUES (null, #{computerName}, #{patientId}, #{labelData}, now())
+    </insert>
+
+    <select id="selectPatientByCondition" resultType="com.pmp.domain.ct.Patient">
+        SELECT id, computer_name computerName, patient_id patientId, label_data labelData, create_time createTime
+        FROM ct_label_data
+        <where>
+            <if test="computerName != null and computerName != ''">
+                AND computer_name = #{computerName}
+            </if>
+            <if test="patientId != null and patientId != ''">
+                AND patient_id = #{patientId}
+            </if>
+            <if test="dateStart != null and dateStart != ''">
+                AND create_time &gt;= #{dateStart}
+            </if>
+            <if test="dateEnd != null and dateEnd != ''">
+                AND create_time &lt;= #{dateEnd}
+            </if>
+        </where>
+    </select>
 
 </mapper>

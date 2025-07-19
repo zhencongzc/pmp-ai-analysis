@@ -1,6 +1,9 @@
 package com.pmp.service.ct.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.pmp.domain.base.ResponseResult;
 import com.pmp.domain.ct.Patient;
 import com.pmp.domain.ct.PatientDTO;
 import com.pmp.interfaces.vo.PatientVO;
@@ -18,16 +21,20 @@ public class CTAnalysisServiceImpl implements CTAnalysisService {
     @Autowired
     CTAnalysisMapper ctAnalysisMapper;
 
-    public void addLabelData(String computerName, String patientId, JSONObject labelData) {
+    @Override
+    public void addLabelData(PatientVO patientVO) {
         Patient patient = new Patient();
-        patient.setComputerName(computerName);
-        patient.setPatientId(patientId);
-        patient.setLabelData(labelData.toJSONString());
+        patient.setComputerName(patientVO.getComputerName());
+        patient.setPatientId(patientVO.getPatientId());
+        patient.setLabelData(patientVO.getLabelData().toJSONString());
         ctAnalysisMapper.insertPatient(patient);
     }
 
-    public List<PatientDTO> findLabelData(String computerName, String patientId, String dateStart, String dateEnd) {
-        List<Patient> list = ctAnalysisMapper.selectPatientByCondition(computerName, patientId, dateStart, dateEnd);
+    @Override
+    public ResponseResult<List<PatientDTO>> findLabelData(PatientVO patientVO) {
+        Page<Object> page = PageHelper.startPage(patientVO.getPage(), patientVO.getPageRow(), true);
+        List<Patient> list = ctAnalysisMapper.selectPatientByCondition(patientVO);
+        //转换对象
         List<PatientDTO> res = new ArrayList<>();
         list.forEach(a -> {
             PatientDTO patientDTO = new PatientDTO();
@@ -38,17 +45,8 @@ public class CTAnalysisServiceImpl implements CTAnalysisService {
             patientDTO.setCreateTime(a.getCreateTime());
             res.add(patientDTO);
         });
-        return res;
+        return ResponseResult.success(res, page.getTotal());
     }
 
-    @Override
-    public void addLabelData(PatientVO patientVO) {
-        ctAnalysisMapper.insertPatient(patientVO);
-    }
 
-    @Override
-    public List<PatientDTO> findLabelData(PatientVO patientVO) {
-        List<Patient> list = ctAnalysisMapper.selectPatientByCondition(patientVO);
-        return new ArrayList<>();
-    }
 }

@@ -20,16 +20,27 @@ public class CTAnalysisController {
     @Autowired
     CTAnalysisService ctAnalysisService;
 
+    /**
+     * 添加病人CT的标注数据
+     *
+     * @param patientVO
+     * @return
+     */
     @PostMapping("/labelData/add")
     public ResponseResult<String> addLabelData(@RequestBody PatientVO patientVO) {
         ctAnalysisService.addLabelData(patientVO);
         return ResponseResult.success();
     }
 
+    /**
+     * 查询病人的标注数据
+     *
+     * @param patientVO
+     * @return
+     */
     @PostMapping("/labelData/find")
     public ResponseResult<List<PatientDTO>> findLabelData(@RequestBody PatientVO patientVO) {
-        List<PatientDTO> list = ctAnalysisService.findLabelData(patientVO);
-        return ResponseResult.success(list, list.size());
+        return ctAnalysisService.findLabelData(patientVO);
     }
 
 }

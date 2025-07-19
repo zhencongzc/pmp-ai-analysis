@@ -26,7 +26,6 @@
     </properties>
 
     <dependencies>
-
         <!--    Spring Boot Web 启动器-->
         <!--    包含内容：Spring MVC、Spring WebFlux、Jackson JSON 处理以及嵌入式 Servlet 容器。-->
         <dependency>
@@ -92,6 +91,13 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>28.1-jre</version>
+        </dependency>
+
+        <!--        PageHelper 分页工具-->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>1.4.6</version>
         </dependency>
     </dependencies>
 
