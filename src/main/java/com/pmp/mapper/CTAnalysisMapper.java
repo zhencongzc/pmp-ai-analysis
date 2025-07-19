@@ -1,16 +1,14 @@
-package com.pmp.domain.mapper;
+package com.pmp.mapper;
 
-import com.alibaba.fastjson.JSONObject;
-import com.pmp.domain.entity.Patient;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import com.pmp.domain.ct.Patient;
+import com.pmp.interfaces.vo.PatientVO;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
 @Mapper
 public interface CTAnalysisMapper {
+
     /**
      * 新增患者信息
      */
@@ -41,4 +39,8 @@ public interface CTAnalysisMapper {
             "</script>"
     })
     List<Patient> selectPatientByCondition(String computerName, String patientId, String dateStart, String dateEnd);
+
+    void insertPatient(PatientVO patientVO);
+
+    List<Patient> selectPatientByCondition(PatientVO patientVO);
 }

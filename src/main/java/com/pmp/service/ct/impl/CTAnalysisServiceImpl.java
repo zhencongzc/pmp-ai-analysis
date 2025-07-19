@@ -1,19 +1,21 @@
-package com.pmp.service;
+package com.pmp.service.ct.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.pmp.domain.entity.Patient;
-import com.pmp.domain.entity.PatientDTO;
-import com.pmp.domain.mapper.CTAnalysisMapper;
+import com.pmp.domain.ct.Patient;
+import com.pmp.domain.ct.PatientDTO;
+import com.pmp.interfaces.vo.PatientVO;
+import com.pmp.mapper.CTAnalysisMapper;
+import com.pmp.service.ct.CTAnalysisService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CTAnalysisService {
+public class CTAnalysisServiceImpl implements CTAnalysisService {
 
-    @Resource
+    @Autowired
     CTAnalysisMapper ctAnalysisMapper;
 
     public void addLabelData(String computerName, String patientId, JSONObject labelData) {
@@ -37,5 +39,16 @@ public class CTAnalysisService {
             res.add(patientDTO);
         });
         return res;
+    }
+
+    @Override
+    public void addLabelData(PatientVO patientVO) {
+        ctAnalysisMapper.insertPatient(patientVO);
+    }
+
+    @Override
+    public List<PatientDTO> findLabelData(PatientVO patientVO) {
+        List<Patient> list = ctAnalysisMapper.selectPatientByCondition(patientVO);
+        return new ArrayList<>();
     }
 }

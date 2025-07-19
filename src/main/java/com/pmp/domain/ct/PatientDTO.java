@@ -1,4 +1,4 @@
-package com.pmp.domain.entity;
+package com.pmp.domain.ct;
 
 import com.alibaba.fastjson.JSONObject;
 import lombok.Data;

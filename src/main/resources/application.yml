@@ -1,17 +1,32 @@
+# 配置文件
 server:
+  ip: 127.0.0.1
+#  ip: 60.205.166.16 #生产环境用
   port: 8081  # 修改端口号
   servlet:
     context-path: /pmp-ai-analysis
+
 spring:
   application:
     name: pmp-ai-analysis  # 应用名称
   # 数据库连接配置
   datasource:
-    url: jdbc:mysql://60.205.166.16:3306/pmp_ai_analysis?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
-    username: admin
-    password: Zc@123456
-    driver-class-name: com.mysql.jdbc.Driver
+    pmp-ai-analysis:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://${server.ip}:3306/pmp-ai-analysis?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+      username: admin
+      password: Zc@123456
 
-# 指定 MyBatis XML 映射文件的位置
-mybatis:
-  mapper-locations: classpath:/mapper/*.xml
+# redis相关
+redis.addrs: 60.205.166.16:6379
+redis.passwd: Zc@123456
+redis.cluster:
+
+# 日志相关
+logging:
+  level:
+    root: info
+    org:
+      springframework:
+        jdbc:
+          core: debug
