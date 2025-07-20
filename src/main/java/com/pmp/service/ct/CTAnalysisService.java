@@ -3,6 +3,7 @@ package com.pmp.service.ct;
 import com.pmp.domain.base.ResponseResult;
 import com.pmp.domain.ct.PatientDTO;
 import com.pmp.interfaces.vo.PatientVO;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -26,4 +27,10 @@ public interface CTAnalysisService {
      */
     ResponseResult<List<PatientDTO>> findLabelData(PatientVO patientVO);
 
+    /**
+     * 保存病人的dicom文件
+     *
+     * @param file
+     */
+    void saveDicom(MultipartFile file);
 }

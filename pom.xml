@@ -99,6 +99,20 @@
             <artifactId>pagehelper-spring-boot-starter</artifactId>
             <version>1.4.6</version>
         </dependency>
+
+        <!-- DICOM 处理核心库 -->
+        <dependency>
+            <groupId>org.dcm4che</groupId>
+            <artifactId>dcm4che-core</artifactId>
+            <version>5.34.0</version>
+        </dependency>
+
+        <!-- 可选：DICOM 图像读取支持 -->
+        <dependency>
+            <groupId>org.dcm4che</groupId>
+            <artifactId>dcm4che-imageio</artifactId>
+            <version>5.34.0</version>
+        </dependency>
     </dependencies>
 
     <build>
