@@ -1,8 +1,12 @@
 package com.pmp.mapper;
 
 import com.pmp.domain.dicom.DicomDO;
+import com.pmp.domain.labelData.LabelDataDTO;
 import com.pmp.domain.patient.PatientDO;
+import com.pmp.web.vo.DicomVO;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 @Mapper
 public interface DicomMapper {
@@ -22,4 +26,10 @@ public interface DicomMapper {
      */
     DicomDO selectDicomBySopInstanceUid(DicomDO dicomDO);
 
+    /**
+     * 根据条件查询dicom列表
+     * @param dicomVO
+     * @return
+     */
+    List<DicomDO> findDicomByCondition(DicomVO dicomVO);
 }

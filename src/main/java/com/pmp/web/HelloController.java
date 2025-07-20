@@ -1,4 +1,4 @@
-package com.pmp.interfaces.facade;
+package com.pmp.web;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

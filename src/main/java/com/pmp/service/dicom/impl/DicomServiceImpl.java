@@ -1,11 +1,18 @@
 package com.pmp.service.dicom.impl;
 
+import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.pmp.domain.dicom.DicomDO;
+import com.pmp.domain.labelData.LabelDataDO;
+import com.pmp.domain.labelData.LabelDataDTO;
 import com.pmp.domain.patient.PatientDO;
+import com.pmp.infrastructure.base.ResponseResult;
 import com.pmp.mapper.DicomMapper;
 import com.pmp.mapper.LabelDateMapper;
 import com.pmp.mapper.PatientMapper;
 import com.pmp.service.dicom.DicomService;
+import com.pmp.web.vo.DicomVO;
 import org.dcm4che3.data.Attributes;
 import org.dcm4che3.data.Tag;
 import org.dcm4che3.io.DicomInputStream;
@@ -14,6 +21,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 @Service
@@ -74,6 +83,13 @@ public class DicomServiceImpl implements DicomService {
             logger.warning("DICOM 文件解析失败");
         }
 
+    }
+
+    @Override
+    public ResponseResult<List<DicomDO>> findDicom(DicomVO dicomVO) {
+        Page<Object> page = PageHelper.startPage(dicomVO.getPage(), dicomVO.getPageRow(), true);
+        List<DicomDO> list = dicomMapper.findDicomByCondition(dicomVO);
+        return ResponseResult.success(list, page.getTotal());
     }
 
 

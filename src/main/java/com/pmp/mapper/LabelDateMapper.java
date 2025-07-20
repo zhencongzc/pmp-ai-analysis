@@ -1,7 +1,7 @@
 package com.pmp.mapper;
 
 import com.pmp.domain.labelData.LabelDataDO;
-import com.pmp.domain.labelData.LabelDataVO;
+import com.pmp.web.vo.LabelDataVO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;

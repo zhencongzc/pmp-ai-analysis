@@ -1,25 +1,20 @@
-package com.pmp.domain.labelData;
+package com.pmp.web.vo;
 
-import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 
 /**
- * 病人CT的标注数据VO
+ * Dicom文件
  */
 @Data
-public class LabelDataVO {
-    /**
-     * 设备名称
-     */
-    private String computerName;
+public class DicomVO {
     /**
      * 病人ID
      */
     private String patientId;
     /**
-     * 标签数据
+     * 病人名称
      */
-    private JSONObject labelData;
+    private String patientName;
     /**
      * 开始时间
      */

@@ -1,8 +1,8 @@
 package com.pmp.service.labelData;
 
-import com.pmp.domain.base.ResponseResult;
+import com.pmp.infrastructure.base.ResponseResult;
 import com.pmp.domain.labelData.LabelDataDTO;
-import com.pmp.domain.labelData.LabelDataVO;
+import com.pmp.web.vo.LabelDataVO;
 
 import java.util.List;
 

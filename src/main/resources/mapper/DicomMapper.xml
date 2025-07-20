@@ -3,11 +3,11 @@
 <mapper namespace="com.pmp.mapper.DicomMapper">
 
     <insert id="insertDicom" parameterType="com.pmp.domain.dicom.DicomDO">
-        INSERT INTO dicom (id, sop_instance_uid, patient_id, patient_name, accession_number,
-                           study_id, series_number, instance_number,
-                           series_date, series_time, study_description,
-                           modality, series_description, rows, columns,
-                           create_time)
+        INSERT INTO ct_dicom (id, sop_instance_uid, patient_id, patient_name, accession_number,
+                              study_id, series_number, instance_number,
+                              series_date, series_time, study_description,
+                              modality, series_description, rows, columns,
+                              create_time)
         VALUES (null, #{sopInstanceUid}, #{patientId}, #{patientName}, #{accessionNumber},
                 #{studyId}, #{seriesNumber}, #{instanceNumber},
                 #{seriesDate}, #{seriesTime}, #{studyDescription},
@@ -33,8 +33,43 @@
             rows,
             columns,
             create_time AS createTime
-        FROM dicom
+        FROM ct_dicom
         WHERE sop_instance_uid = #{sopInstanceUid}
+    </select>
+
+    <select id="findDicomByCondition" parameterType="com.pmp.web.vo.DicomVO"
+            resultType="com.pmp.domain.dicom.DicomDO">
+        SELECT id,
+        sop_instance_uid AS sopInstanceUid,
+        patient_id AS patientId,
+        patient_name AS patientName,
+        accession_number AS accessionNumber,
+        study_id AS studyId,
+        series_number AS seriesNumber,
+        instance_number AS instanceNumber,
+        series_date AS seriesDate,
+        series_time AS seriesTime,
+        study_description AS studyDescription,
+        modality,
+        series_description AS seriesDescription,
+        rows,
+        columns,
+        create_time AS createTime
+        FROM ct_dicom
+        <where>
+            <if test="patientId != null and patientId != ''">
+                AND patient_id = #{patientId}
+            </if>
+            <if test="patientName != null and patientName != ''">
+                AND patient_name = #{patientName}
+            </if>
+            <if test="dateStart != null and dateStart != ''">
+                AND create_time &gt;= #{dateStart}
+            </if>
+            <if test="dateEnd != null and dateEnd != ''">
+                AND create_time &lt;= #{dateEnd}
+            </if>
+        </where>
     </select>
 
 </mapper>

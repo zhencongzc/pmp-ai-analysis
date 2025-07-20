@@ -24,7 +24,7 @@ public class DicomDO {
      */
     private String patientName;
     /**
-     * CT唯一标识号
+     * 医院唯一标识号
      * 医院为某次检查分配的唯一标识号，不同医院会重复
      */
     private String accessionNumber;

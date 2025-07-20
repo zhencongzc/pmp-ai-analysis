@@ -1,8 +1,10 @@
-package com.pmp.interfaces.facade;
+package com.pmp.web;
 
-import com.pmp.domain.base.ResponseResult;
+import com.pmp.domain.dicom.DicomDO;
+import com.pmp.infrastructure.base.ResponseResult;
 import com.pmp.domain.labelData.LabelDataDTO;
-import com.pmp.domain.labelData.LabelDataVO;
+import com.pmp.web.vo.DicomVO;
+import com.pmp.web.vo.LabelDataVO;
 import com.pmp.service.dicom.DicomService;
 import com.pmp.service.labelData.LabelDataService;
 import com.pmp.service.patient.PatientService;
@@ -53,14 +55,27 @@ public class CTModuleController {
     }
 
     /**
-     * 导入CT文件
+     * 批量上传dicom文件
      *
      * @return
      */
     @PostMapping(value = "/dicom/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseResult<String> uploadDicomFile(@RequestParam("file") MultipartFile file) {
-        dicomService.saveDicom(file);
+    public ResponseResult<String> uploadDicomFile(@RequestParam("file") MultipartFile file[]) {
+        for (MultipartFile f : file) {
+            dicomService.saveDicom(f);
+        }
         return ResponseResult.success();
+    }
+
+    /**
+     * 查询dicom列表
+     *
+     * @param dicomVO
+     * @return
+     */
+    @PostMapping("/dicom/find")
+    public ResponseResult<List<DicomDO>> findDicom(@RequestBody DicomVO dicomVO) {
+        return dicomService.findDicom(dicomVO);
     }
 
 
