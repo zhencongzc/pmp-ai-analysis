@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.pmp.mapper.CTAnalysisMapper">
+<mapper namespace="com.pmp.mapper.LabelDateMapper">
 
-    <insert id="insertPatient" parameterType="com.pmp.domain.ct.Patient">
+    <insert id="insertLabelData" parameterType="com.pmp.domain.labelData.LabelDataDO">
         INSERT INTO ct_label_data (id, computer_name, patient_id, label_data, create_time)
         VALUES (null, #{computerName}, #{patientId}, #{labelData}, now())
     </insert>
 
-    <select id="selectPatientByCondition" resultType="com.pmp.domain.ct.Patient">
-        SELECT id, computer_name computerName, patient_id patientId, label_data labelData, create_time createTime
+    <select id="selectLabelDataByCondition" parameterType="com.pmp.domain.labelData.LabelDataDO"
+            resultType="com.pmp.domain.labelData.LabelDataDO">
+        SELECT id,
+        computer_name AS computerName,
+        patient_id AS patientId,
+        label_data AS labelData,
+        create_time AS createTime
         FROM ct_label_data
         <where>
             <if test="computerName != null and computerName != ''">

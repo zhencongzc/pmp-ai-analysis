@@ -1,54 +1,55 @@
 package com.pmp.interfaces.facade;
 
 import com.pmp.domain.base.ResponseResult;
-import com.pmp.domain.ct.PatientDTO;
-import com.pmp.interfaces.vo.PatientVO;
-import com.pmp.service.ct.CTAnalysisService;
-import org.dcm4che3.data.Attributes;
-import org.dcm4che3.data.Tag;
-import org.dcm4che3.io.DicomInputStream;
+import com.pmp.domain.labelData.LabelDataDTO;
+import com.pmp.domain.labelData.LabelDataVO;
+import com.pmp.service.dicom.DicomService;
+import com.pmp.service.labelData.LabelDataService;
+import com.pmp.service.patient.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
- * CT管理模块控制层
+ * CT管理模块
  */
 @RestController
 @RequestMapping("/ct-module")
 public class CTModuleController {
 
     @Autowired
-    CTAnalysisService ctAnalysisService;
+    LabelDataService labelDataService;
+
+    @Autowired
+    PatientService patientService;
+
+    @Autowired
+    DicomService dicomService;
 
     /**
      * 添加病人CT的标注数据
      *
-     * @param patientVO
+     * @param labelDataVO
      * @return
      */
     @PostMapping("/labelData/add")
-    public ResponseResult<String> addLabelData(@RequestBody PatientVO patientVO) {
-        ctAnalysisService.addLabelData(patientVO);
+    public ResponseResult<String> addLabelData(@RequestBody LabelDataVO labelDataVO) {
+        labelDataService.addLabelData(labelDataVO);
         return ResponseResult.success();
     }
 
     /**
      * 查询病人的标注数据
      *
-     * @param patientVO
+     * @param labelDataVO
      * @return
      */
     @PostMapping("/labelData/find")
-    public ResponseResult<List<PatientDTO>> findLabelData(@RequestBody PatientVO patientVO) {
-        return ctAnalysisService.findLabelData(patientVO);
+    public ResponseResult<List<LabelDataDTO>> findLabelData(@RequestBody LabelDataVO labelDataVO) {
+        return labelDataService.findLabelData(labelDataVO);
     }
 
     /**
@@ -58,7 +59,7 @@ public class CTModuleController {
      */
     @PostMapping(value = "/dicom/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseResult<String> uploadDicomFile(@RequestParam("file") MultipartFile file) {
-        ctAnalysisService.saveDicom(file);
+        dicomService.saveDicom(file);
         return ResponseResult.success();
     }
 

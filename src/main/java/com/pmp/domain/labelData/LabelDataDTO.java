@@ -1,13 +1,13 @@
-package com.pmp.domain.ct;
+package com.pmp.domain.labelData;
 
 import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 
 /**
- * 病人CT标注数据DTO
+ * 病人CT的标注数据
  */
 @Data
-public class PatientDTO {
+public class LabelDataDTO {
 
     /**
      * 主键

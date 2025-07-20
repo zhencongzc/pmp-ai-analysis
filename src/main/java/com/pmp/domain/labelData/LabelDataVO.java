@@ -1,10 +1,13 @@
-package com.pmp.interfaces.vo;
+package com.pmp.domain.labelData;
 
 import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 
+/**
+ * 病人CT的标注数据VO
+ */
 @Data
-public class PatientVO {
+public class LabelDataVO {
     /**
      * 设备名称
      */

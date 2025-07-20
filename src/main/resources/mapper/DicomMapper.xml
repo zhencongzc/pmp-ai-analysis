@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pmp.mapper.DicomMapper">
+
+    <insert id="insertDicom" parameterType="com.pmp.domain.dicom.DicomDO">
+        INSERT INTO dicom (id, sop_instance_uid, patient_id, patient_name, accession_number,
+                           study_id, series_number, instance_number,
+                           series_date, series_time, study_description,
+                           modality, series_description, rows, columns,
+                           create_time)
+        VALUES (null, #{sopInstanceUid}, #{patientId}, #{patientName}, #{accessionNumber},
+                #{studyId}, #{seriesNumber}, #{instanceNumber},
+                #{seriesDate}, #{seriesTime}, #{studyDescription},
+                #{modality}, #{seriesDescription}, #{rows}, #{columns},
+                now())
+    </insert>
+
+    <select id="selectDicomBySopInstanceUid" parameterType="com.pmp.domain.dicom.DicomDO"
+            resultType="com.pmp.domain.dicom.DicomDO">
+        SELECT id,
+               sop_instance_uid   AS sopInstanceUid,
+               patient_id         AS patientId,
+               patient_name       AS patientName,
+               accession_number   AS accessionNumber,
+               study_id           AS studyId,
+               series_number      AS seriesNumber,
+               instance_number    AS instanceNumber,
+               series_date        AS seriesDate,
+               series_time        AS seriesTime,
+               study_description  AS studyDescription,
+               modality,
+               series_description AS seriesDescription,
+            rows,
+            columns,
+            create_time AS createTime
+        FROM dicom
+        WHERE sop_instance_uid = #{sopInstanceUid}
+    </select>
+
+</mapper>

@@ -1,12 +1,12 @@
-package com.pmp.domain.ct;
+package com.pmp.domain.labelData;
 
 import lombok.Data;
 
 /**
- * 病人CT标注数据
+ * 病人CT的标注数据
  */
 @Data
-public class Patient {
+public class LabelDataDO {
     /**
      * 主键
      */
