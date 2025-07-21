@@ -92,5 +92,11 @@ public class DicomServiceImpl implements DicomService {
         return ResponseResult.success(list, page.getTotal());
     }
 
-
+    @Override
+    public ResponseResult<DicomDO> findDicomDetail(Integer id) {
+        DicomVO dicomVO = new DicomVO();
+        dicomVO.setId(id);
+        DicomDO res = dicomMapper.findDicomById(dicomVO);
+        return ResponseResult.success(res);
+    }
 }

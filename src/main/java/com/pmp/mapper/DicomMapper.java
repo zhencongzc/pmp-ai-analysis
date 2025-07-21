@@ -32,4 +32,10 @@ public interface DicomMapper {
      * @return
      */
     List<DicomDO> findDicomByCondition(DicomVO dicomVO);
+
+    /**
+     * 根据id查询dicom文件
+     * @param dicomVO
+     */
+    DicomDO findDicomById(DicomVO dicomVO);
 }

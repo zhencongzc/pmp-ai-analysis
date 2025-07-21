@@ -28,4 +28,12 @@ public interface DicomService {
      * @return
      */
     ResponseResult<List<DicomDO>> findDicom(DicomVO dicomVO);
+
+    /**
+     * 查看dicom详情
+     *
+     * @param id
+     * @return
+     */
+    ResponseResult<DicomDO> findDicomDetail(Integer id);
 }

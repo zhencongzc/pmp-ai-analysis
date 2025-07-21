@@ -79,4 +79,14 @@ public class CTModuleController {
     }
 
 
+    /**
+     * 查看dicom详情
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/dicom/detail")
+    public ResponseResult<DicomDO> findDicomDetail(@RequestParam Integer id) {
+        return dicomService.findDicomDetail(id);
+    }
 }

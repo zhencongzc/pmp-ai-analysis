@@ -8,6 +8,10 @@ import lombok.Data;
 @Data
 public class DicomVO {
     /**
+     * dicomID
+     */
+    private Integer id;
+    /**
      * 病人ID
      */
     private String patientId;

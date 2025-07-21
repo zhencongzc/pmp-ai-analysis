@@ -71,5 +71,26 @@
             </if>
         </where>
     </select>
+    <select id="findDicomById" parameterType="com.pmp.web.vo.DicomVO"
+            resultType="com.pmp.domain.dicom.DicomDO">
+        SELECT id,
+               sop_instance_uid   AS sopInstanceUid,
+               patient_id         AS patientId,
+               patient_name       AS patientName,
+               accession_number   AS accessionNumber,
+               study_id           AS studyId,
+               series_number      AS seriesNumber,
+               instance_number    AS instanceNumber,
+               series_date        AS seriesDate,
+               series_time        AS seriesTime,
+               study_description  AS studyDescription,
+               modality,
+               series_description AS seriesDescription,
+            rows,
+            columns,
+            create_time AS createTime
+        FROM ct_dicom
+        WHERE id=#{id}
+    </select>
 
 </mapper>
