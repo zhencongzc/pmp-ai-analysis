@@ -17,10 +17,10 @@
         FROM ct_label_data
         <where>
             <if test="computerName != null and computerName != ''">
-                AND computer_name = #{computerName}
+                AND computer_name LIKE CONCAT('%', #{computerName}, '%')
             </if>
             <if test="patientId != null and patientId != ''">
-                AND patient_id = #{patientId}
+                AND patient_id LIKE CONCAT('%', #{patientId}, '%')
             </if>
             <if test="dateStart != null and dateStart != ''">
                 AND create_time &gt;= #{dateStart}

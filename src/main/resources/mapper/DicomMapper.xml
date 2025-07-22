@@ -58,10 +58,10 @@
         FROM ct_dicom
         <where>
             <if test="patientId != null and patientId != ''">
-                AND patient_id = #{patientId}
+                AND patient_id LIKE CONCAT('%', #{patientId}, '%')
             </if>
             <if test="patientName != null and patientName != ''">
-                AND patient_name = #{patientName}
+                AND patient_name LIKE CONCAT('%', #{patientName}, '%')
             </if>
             <if test="dateStart != null and dateStart != ''">
                 AND create_time &gt;= #{dateStart}

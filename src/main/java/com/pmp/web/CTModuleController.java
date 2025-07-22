@@ -78,7 +78,6 @@ public class CTModuleController {
         return dicomService.findDicom(dicomVO);
     }
 
-
     /**
      * 查看dicom详情
      *
