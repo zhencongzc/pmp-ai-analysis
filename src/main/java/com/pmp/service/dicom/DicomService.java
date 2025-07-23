@@ -6,6 +6,7 @@ import com.pmp.infrastructure.base.ResponseResult;
 import com.pmp.web.vo.DicomVO;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -19,7 +20,7 @@ public interface DicomService {
      *
      * @param file
      */
-    void saveDicom(MultipartFile file);
+    void saveDicom(MultipartFile file) throws IOException;
 
     /**
      * 查询dicom列表

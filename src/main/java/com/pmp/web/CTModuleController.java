@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -62,7 +63,12 @@ public class CTModuleController {
     @PostMapping(value = "/dicom/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseResult<String> uploadDicomFile(@RequestParam("file") MultipartFile file[]) {
         for (MultipartFile f : file) {
-            dicomService.saveDicom(f);
+            try {
+                dicomService.saveDicom(f);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return ResponseResult.error(500,e.getMessage());
+            }
         }
         return ResponseResult.success();
     }
