@@ -7,12 +7,11 @@
                               study_id, series_number, instance_number,
                               series_date, series_time, study_description,
                               modality, series_description, rows, columns,
-                              create_time)
+                              dicom_path, png_path, create_time)
         VALUES (null, #{sopInstanceUid}, #{patientId}, #{patientName}, #{accessionNumber},
                 #{studyId}, #{seriesNumber}, #{instanceNumber},
                 #{seriesDate}, #{seriesTime}, #{studyDescription},
-                #{modality}, #{seriesDescription}, #{rows}, #{columns},
-                now())
+                #{modality}, #{seriesDescription}, #{rows}, #{columns}, #{dicomPath}, #{pngPath}, now())
     </insert>
 
     <select id="selectDicomBySopInstanceUid" parameterType="com.pmp.domain.dicom.DicomDO"
@@ -54,6 +53,8 @@
         series_description AS seriesDescription,
         rows,
         columns,
+        dicom_path AS dicomPath,
+        png_path AS pngPath,
         create_time AS createTime
         FROM ct_dicom
         <where>
@@ -88,6 +89,8 @@
                series_description AS seriesDescription,
             rows,
             columns,
+            dicom_path AS dicomPath,
+            png_path AS pngPath,
             create_time AS createTime
         FROM ct_dicom
         WHERE id=#{id}

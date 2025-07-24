@@ -107,7 +107,14 @@
             <version>5.34.0</version>
         </dependency>
 
-        <!-- 可选：DICOM 图像读取支持 -->
+        <!-- 图像处理库（包含PhotometricInterpretation类） -->
+        <dependency>
+            <groupId>org.dcm4che</groupId>
+            <artifactId>dcm4che-image</artifactId>
+            <version>5.34.0</version>
+        </dependency>
+
+        <!-- 图像IO插件 -->
         <dependency>
             <groupId>org.dcm4che</groupId>
             <artifactId>dcm4che-imageio</artifactId>

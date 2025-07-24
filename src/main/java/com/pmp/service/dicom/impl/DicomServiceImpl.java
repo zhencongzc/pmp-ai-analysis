@@ -8,6 +8,8 @@ import com.pmp.domain.labelData.LabelDataDO;
 import com.pmp.domain.labelData.LabelDataDTO;
 import com.pmp.domain.patient.PatientDO;
 import com.pmp.infrastructure.base.ResponseResult;
+import com.pmp.infrastructure.util.DicomUtil;
+import com.pmp.infrastructure.util.FileUtil;
 import com.pmp.infrastructure.util.StreamUtil;
 import com.pmp.mapper.DicomMapper;
 import com.pmp.mapper.LabelDateMapper;
@@ -19,6 +21,7 @@ import org.dcm4che3.data.Tag;
 import org.dcm4che3.io.DicomInputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
@@ -33,6 +36,8 @@ public class DicomServiceImpl implements DicomService {
 
     private static final Logger logger = Logger.getLogger(DicomServiceImpl.class.getName());
 
+    private static String uploadUrl = "/opt/upload/";
+
     @Autowired
     LabelDateMapper labelDateMapper;
     @Autowired
@@ -41,6 +46,7 @@ public class DicomServiceImpl implements DicomService {
     DicomMapper dicomMapper;
 
     @Override
+    @Transactional
     public void saveDicom(MultipartFile file) throws IOException {
         InputStream is = file.getInputStream();
         byte[] data = StreamUtil.getCopyInputStream(is);
@@ -59,30 +65,22 @@ public class DicomServiceImpl implements DicomService {
         if (existPatient == null)
             patientMapper.insertPatient(patientDO);
 
-        //新增dicom文件数
-        DicomDO dicomDO = new DicomDO();
-        dicomDO.setSopInstanceUid(attributes.getString(Tag.SOPInstanceUID));
-        dicomDO.setPatientId(attributes.getString(Tag.PatientID));
-        dicomDO.setPatientName(attributes.getString(Tag.PatientName));
-        dicomDO.setAccessionNumber(attributes.getString(Tag.AccessionNumber));
-        dicomDO.setStudyId(attributes.getString(Tag.StudyID));
-        dicomDO.setSeriesNumber(attributes.getString(Tag.SeriesNumber));
-        dicomDO.setInstanceNumber(attributes.getString(Tag.InstanceNumber));
-        dicomDO.setSeriesDate(attributes.getString(Tag.SeriesDate));
-        dicomDO.setSeriesTime(attributes.getString(Tag.SeriesTime));
-        dicomDO.setStudyDescription(attributes.getString(Tag.StudyDescription));
-        dicomDO.setModality(attributes.getString(Tag.Modality));
-        dicomDO.setSeriesDescription(attributes.getString(Tag.SeriesDescription));
-        dicomDO.setRows(attributes.getString(Tag.Rows));
-        dicomDO.setColumns(attributes.getString(Tag.Columns));
+        DicomDO dicomDO = DicomUtil.changeAttributesToDicom(attributes);
+        String dicomPath = uploadUrl + dicomDO.getAccessionNumber() + "/" + file.getOriginalFilename();
+        //将dicom文件存储到服务器
+        StreamUtil.saveInputStreamToFile(new ByteArrayInputStream(data), dicomPath);
+
+        String dicomName = FileUtil.getFileName(file, false);
+        String pngPath = uploadUrl + dicomDO.getAccessionNumber() + "/" + dicomName + ".png";
+        //在当前路径，将dicom转为png
+//        DicomUtil.convert(dicomPath, pngPath);
+
+        //新增dicom数据
+        dicomDO.setDicomPath(dicomPath);
+        dicomDO.setPngPath(pngPath);
         DicomDO existDicom = dicomMapper.selectDicomBySopInstanceUid(dicomDO);
         if (existDicom == null)
             dicomMapper.insertDicom(dicomDO);
-
-        //将dicom文件存储到服务器/opt/upload
-        StreamUtil.saveInputStreamToFile(new ByteArrayInputStream(data), "/opt/upload/" + file.getOriginalFilename());
-
-
     }
 
     @Override

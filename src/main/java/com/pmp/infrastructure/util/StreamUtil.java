@@ -37,20 +37,6 @@ public class StreamUtil {
      * @param targetFilePath
      * @throws IOException
      */
-//    public static void saveInputStreamToFile(InputStream inputStream, String targetFilePath) throws IOException {
-//        try (OutputStream outputStream = new FileOutputStream(targetFilePath)) {
-//            byte[] buffer = new byte[4096]; // 4KB缓冲区
-//            int bytesRead;
-//            while ((bytesRead = inputStream.read(buffer)) != -1) {
-//                outputStream.write(buffer, 0, bytesRead);
-//            }
-//        } finally {
-//            // 确保输入流关闭
-//            if (inputStream != null) {
-//                inputStream.close();
-//            }
-//        }
-//    }
     public static void saveInputStreamToFile(InputStream inputStream, String targetFilePath) throws IOException {
         Path targetPath = Paths.get(targetFilePath);
 

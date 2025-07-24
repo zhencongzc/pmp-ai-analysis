@@ -72,6 +72,14 @@ public class DicomDO {
      */
     private String columns;
     /**
+     * dicom文件地址
+     */
+    private String dicomPath;
+    /**
+     * 图片文件地址
+     */
+    private String pngPath;
+    /**
      * 创建时间
      */
     private String createTime;
