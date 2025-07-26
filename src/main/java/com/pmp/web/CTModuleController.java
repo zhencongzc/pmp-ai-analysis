@@ -1,5 +1,6 @@
 package com.pmp.web;
 
+import com.pixelmed.dicom.DicomException;
 import com.pmp.domain.dicom.DicomDO;
 import com.pmp.infrastructure.base.ResponseResult;
 import com.pmp.domain.labelData.LabelDataDTO;
@@ -65,7 +66,7 @@ public class CTModuleController {
         for (MultipartFile f : file) {
             try {
                 dicomService.saveDicom(f);
-            } catch (IOException e) {
+            } catch (IOException | DicomException e) {
                 e.printStackTrace();
                 return ResponseResult.error(500,e.getMessage());
             }

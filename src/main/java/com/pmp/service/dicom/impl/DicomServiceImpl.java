@@ -1,11 +1,9 @@
 package com.pmp.service.dicom.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.pixelmed.dicom.DicomException;
 import com.pmp.domain.dicom.DicomDO;
-import com.pmp.domain.labelData.LabelDataDO;
-import com.pmp.domain.labelData.LabelDataDTO;
 import com.pmp.domain.patient.PatientDO;
 import com.pmp.infrastructure.base.ResponseResult;
 import com.pmp.infrastructure.util.DicomUtil;
@@ -27,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -47,7 +44,7 @@ public class DicomServiceImpl implements DicomService {
 
     @Override
     @Transactional
-    public void saveDicom(MultipartFile file) throws IOException {
+    public void saveDicom(MultipartFile file) throws IOException, DicomException {
         InputStream is = file.getInputStream();
         byte[] data = StreamUtil.getCopyInputStream(is);
         //读取DICOM元数据
@@ -65,15 +62,15 @@ public class DicomServiceImpl implements DicomService {
         if (existPatient == null)
             patientMapper.insertPatient(patientDO);
 
+        //将dicom数据转为对象
         DicomDO dicomDO = DicomUtil.changeAttributesToDicom(attributes);
-        String dicomPath = uploadUrl + dicomDO.getAccessionNumber() + "/" + file.getOriginalFilename();
         //将dicom文件存储到服务器
+        String dicomPath = uploadUrl + dicomDO.getAccessionNumber() + "/" + FileUtil.getFileName(file, true);
         StreamUtil.saveInputStreamToFile(new ByteArrayInputStream(data), dicomPath);
-
+        //在当前路径，将dicom转为png
         String dicomName = FileUtil.getFileName(file, false);
         String pngPath = uploadUrl + dicomDO.getAccessionNumber() + "/" + dicomName + ".png";
-        //在当前路径，将dicom转为png
-//        DicomUtil.convert(dicomPath, pngPath);
+        DicomUtil.convertDicomToPng(dicomPath, pngPath);
 
         //新增dicom数据
         dicomDO.setDicomPath(dicomPath);

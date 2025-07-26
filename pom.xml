@@ -120,6 +120,20 @@
             <artifactId>dcm4che-imageio</artifactId>
             <version>5.34.0</version>
         </dependency>
+
+        <!-- dicom转png工具 -->
+        <dependency>
+            <groupId>com.pixelmed</groupId>
+            <artifactId>dicom</artifactId>
+            <version>20120929</version>
+        </dependency>
+        <!-- dicom转png工具依赖 -->
+        <dependency>
+            <groupId>javax.vecmath</groupId>
+            <artifactId>vecmath</artifactId>
+            <version>1.5.2</version>
+        </dependency>
+
     </dependencies>
 
     <build>

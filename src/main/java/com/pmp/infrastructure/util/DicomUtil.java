@@ -1,21 +1,38 @@
 package com.pmp.infrastructure.util;
 
+import com.pixelmed.dicom.DicomException;
+import com.pixelmed.display.ConsumerFormatImageMaker;
 import com.pmp.domain.dicom.DicomDO;
 import org.dcm4che3.data.Attributes;
 import org.dcm4che3.data.Tag;
+import org.dcm4che3.imageio.plugins.dcm.DicomImageReadParam;
 import org.dcm4che3.imageio.plugins.dcm.DicomImageReader;
 import org.dcm4che3.imageio.plugins.dcm.DicomImageReaderSpi;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 
 /**
  * Dicom工具类
  */
 public class DicomUtil {
+
+    /**
+     * 在当前路径，将dicom文件转为png
+     *
+     * @param dicomFilePath
+     * @param outputPngFilePath
+     * @throws IOException
+     * @throws DicomException
+     */
+    public static void convertDicomToPng(String dicomFilePath, String outputPngFilePath) throws IOException, DicomException {
+        ConsumerFormatImageMaker.convertFileToEightBitImage(dicomFilePath, outputPngFilePath, "png", 0);
+    }
 
     /**
      * 在当前路径，将dicom文件转为png
@@ -30,28 +47,15 @@ public class DicomUtil {
         if (!dicomFile.exists() || !dicomFile.isFile()) {
             throw new IOException("DICOM 文件不存在: " + dicomFilePath);
         }
-
         // 创建 DICOM 图像读取器
         DicomImageReaderSpi readerSpi = new DicomImageReaderSpi();
         DicomImageReader reader = new DicomImageReader(readerSpi);
-
         // 使用 try-with-resources 确保 ImageInputStream 被关闭
         try (ImageInputStream iis = ImageIO.createImageInputStream(dicomFile)) {
             // 设置输入
             reader.setInput(iis);
-
-            // 关键步骤：读取 DICOM 元数据，校验尺寸
-            Attributes dataset = reader.getStreamMetadata().getAttributes(); // 获取 DICOM 数据集
-            int rows = dataset.getInt(Tag.Rows, -1); // 读取行数（DICOM 标签：0028,0010）
-            int columns = dataset.getInt(Tag.Columns, -1); // 读取列数（DICOM 标签：0028,0011）
-
-            // 校验尺寸有效性
-            if (rows <= 0 || columns <= 0) {
-                throw new IOException("DICOM 文件元数据无效：行数=" + rows + "，列数=" + columns + "（必须为正数）");
-            }
-
             // 读取 DICOM 图像
-            BufferedImage image = reader.read(0);
+            BufferedImage image = reader.read(0, new DicomImageReadParam());
             // 直接写入 PNG 文件（简化版）
             ImageIO.write(image, "PNG", new File(outputPngPath));
         } finally {

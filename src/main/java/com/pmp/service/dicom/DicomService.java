@@ -1,5 +1,6 @@
 package com.pmp.service.dicom;
 
+import com.pixelmed.dicom.DicomException;
 import com.pmp.domain.dicom.DicomDO;
 import com.pmp.domain.labelData.LabelDataDTO;
 import com.pmp.infrastructure.base.ResponseResult;
@@ -20,7 +21,7 @@ public interface DicomService {
      *
      * @param file
      */
-    void saveDicom(MultipartFile file) throws IOException;
+    void saveDicom(MultipartFile file) throws IOException, DicomException;
 
     /**
      * 查询dicom列表
