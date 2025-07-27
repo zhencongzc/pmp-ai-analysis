@@ -71,6 +71,7 @@
                 AND create_time &lt;= #{dateEnd}
             </if>
         </where>
+        ORDER BY create_time DESC
     </select>
     <select id="findDicomById" parameterType="com.pmp.web.vo.DicomVO"
             resultType="com.pmp.domain.dicom.DicomDO">
@@ -94,6 +95,13 @@
             create_time AS createTime
         FROM ct_dicom
         WHERE id=#{id}
+    </select>
+
+    <select id="findGroupPictureByAccessionNumber" resultType="java.lang.String">
+        SELECT png_path AS pngPath
+        FROM ct_dicom
+        WHERE accession_number = #{accessionNumber}
+        ORDER BY instance_number
     </select>
 
 </mapper>

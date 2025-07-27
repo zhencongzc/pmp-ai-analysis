@@ -68,7 +68,7 @@ public class CTModuleController {
                 dicomService.saveDicom(f);
             } catch (IOException | DicomException e) {
                 e.printStackTrace();
-                return ResponseResult.error(500,e.getMessage());
+                return ResponseResult.error(500, e.getMessage());
             }
         }
         return ResponseResult.success();
@@ -88,11 +88,24 @@ public class CTModuleController {
     /**
      * 查看dicom详情
      *
-     * @param id
+     * @param id dicom文件主键
      * @return
      */
     @GetMapping("/dicom/detail")
     public ResponseResult<DicomDO> findDicomDetail(@RequestParam Integer id) {
-        return dicomService.findDicomDetail(id);
+        DicomDO res = dicomService.findDicomDetail(id);
+        return ResponseResult.success(res);
+    }
+
+    /**
+     * 整组图片
+     *
+     * @param accessionNumber 医院唯一标识号
+     * @return
+     */
+    @GetMapping("/dicom/findGroupPicture")
+    public ResponseResult<List<String>> findGroupPicture(@RequestParam String accessionNumber) {
+        List<String> groupData = dicomService.findGroupPicture(accessionNumber);
+        return ResponseResult.success(groupData);
     }
 }

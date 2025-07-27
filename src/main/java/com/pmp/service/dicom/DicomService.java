@@ -37,5 +37,13 @@ public interface DicomService {
      * @param id
      * @return
      */
-    ResponseResult<DicomDO> findDicomDetail(Integer id);
+    DicomDO findDicomDetail(Integer id);
+
+    /**
+     * 根据医院唯一标识号查询整组图片
+     *
+     * @param accessionNumber 医院唯一标识号
+     * @return
+     */
+    List<String> findGroupPicture(String accessionNumber);
 }
