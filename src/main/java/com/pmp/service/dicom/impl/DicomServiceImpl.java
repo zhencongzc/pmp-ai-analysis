@@ -26,6 +26,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 @Service
@@ -62,8 +63,11 @@ public class DicomServiceImpl implements DicomService {
         if (existPatient == null)
             patientMapper.insertPatient(patientDO);
 
-        //将dicom数据转为对象
+        //将dicom数据转为对象，如果之前存储过就不再处理
         DicomDO dicomDO = DicomUtil.changeAttributesToDicom(attributes);
+        DicomDO existDicom = dicomMapper.selectDicomBySopInstanceUid(dicomDO);
+        if (!Objects.isNull(existDicom)) return;
+
         //将dicom文件存储到服务器
         String dicomPath = uploadUrl + dicomDO.getAccessionNumber() + "/" + FileUtil.getFileName(file, true);
         StreamUtil.saveInputStreamToFile(new ByteArrayInputStream(data), dicomPath);
@@ -75,9 +79,7 @@ public class DicomServiceImpl implements DicomService {
         //新增dicom数据
         dicomDO.setDicomPath(dicomPath);
         dicomDO.setPngPath(pngPath);
-        DicomDO existDicom = dicomMapper.selectDicomBySopInstanceUid(dicomDO);
-        if (existDicom == null)
-            dicomMapper.insertDicom(dicomDO);
+        dicomMapper.insertDicom(dicomDO);
     }
 
     @Override
