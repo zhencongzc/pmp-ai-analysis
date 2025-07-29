@@ -16,7 +16,44 @@
                birth_day    AS birthDay,
                create_time  AS createTime
         FROM patient
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectPatientByPatientId" parameterType="com.pmp.domain.patient.PatientDO"
+            resultType="com.pmp.domain.patient.PatientDO">
+        SELECT id,
+               patient_id   AS patientId,
+               patient_name AS patientName,
+               sex,
+               birth_day    AS birthDay,
+               create_time  AS createTime
+        FROM patient
         WHERE patient_id = #{patientId}
+    </select>
+
+    <select id="findPatientByCondition" resultType="com.pmp.domain.patient.PatientDO">
+        SELECT id,
+        patient_id AS patientId,
+        patient_name AS patientName,
+        sex,
+        birth_day AS birthDay,
+        create_time AS createTime
+        FROM patient
+        <where>
+            <if test="patientId != null and patientId != ''">
+                AND patient_id LIKE CONCAT('%', #{patientId}, '%')
+            </if>
+            <if test="patientName != null and patientName != ''">
+                AND patient_name LIKE CONCAT('%', #{patientName}, '%')
+            </if>
+            <if test="dateStart != null and dateStart != ''">
+                AND create_time &gt;= #{dateStart}
+            </if>
+            <if test="dateEnd != null and dateEnd != ''">
+                AND create_time &lt;= #{dateEnd}
+            </if>
+        </where>
+        ORDER BY create_time DESC
     </select>
 
 </mapper>

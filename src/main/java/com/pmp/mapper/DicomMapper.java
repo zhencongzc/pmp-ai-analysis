@@ -3,6 +3,7 @@ package com.pmp.mapper;
 import com.pmp.domain.dicom.DicomDO;
 import com.pmp.domain.labelData.LabelDataDTO;
 import com.pmp.domain.patient.PatientDO;
+import com.pmp.domain.report.ReportDO;
 import com.pmp.web.vo.DicomVO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -49,4 +50,12 @@ public interface DicomMapper {
      * @return
      */
     List<String> findGroupPictureByAccessionNumber(String accessionNumber);
+
+    /**
+     * 根据医院唯一标识号查询CT分析报告
+     *
+     * @param accessionNumber
+     * @return
+     */
+    ReportDO findReport(String accessionNumber);
 }

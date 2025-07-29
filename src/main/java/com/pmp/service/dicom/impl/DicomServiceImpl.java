@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.pixelmed.dicom.DicomException;
 import com.pmp.domain.dicom.DicomDO;
 import com.pmp.domain.patient.PatientDO;
+import com.pmp.domain.report.ReportDO;
 import com.pmp.infrastructure.base.ResponseResult;
 import com.pmp.infrastructure.util.DicomUtil;
 import com.pmp.infrastructure.util.FileUtil;
@@ -59,7 +60,7 @@ public class DicomServiceImpl implements DicomService {
 //            patientDO.setSex(attributes.getString(Tag.PatientSex));//性别有乱码，后续优化
         patientDO.setBirthDay(attributes.getString(Tag.PatientBirthDate));
         //查询是否录入过当前病人信息，如果没有就新增数据
-        PatientDO existPatient = patientMapper.selectPatientById(patientDO);
+        PatientDO existPatient = patientMapper.selectPatientByPatientId(patientDO);
         if (existPatient == null)
             patientMapper.insertPatient(patientDO);
 
@@ -99,5 +100,10 @@ public class DicomServiceImpl implements DicomService {
     @Override
     public List<String> findGroupPicture(String accessionNumber) {
         return dicomMapper.findGroupPictureByAccessionNumber(accessionNumber);
+    }
+
+    @Override
+    public ReportDO findReport(String accessionNumber) {
+        return dicomMapper.findReport(accessionNumber);
     }
 }

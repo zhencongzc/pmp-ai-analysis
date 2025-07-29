@@ -2,6 +2,7 @@ package com.pmp.web;
 
 import com.pixelmed.dicom.DicomException;
 import com.pmp.domain.dicom.DicomDO;
+import com.pmp.domain.report.ReportDO;
 import com.pmp.infrastructure.base.ResponseResult;
 import com.pmp.domain.labelData.LabelDataDTO;
 import com.pmp.web.vo.DicomVO;
@@ -98,7 +99,7 @@ public class CTModuleController {
     }
 
     /**
-     * 整组图片
+     * 预览图片
      *
      * @param accessionNumber 医院唯一标识号
      * @return
@@ -107,5 +108,17 @@ public class CTModuleController {
     public ResponseResult<List<String>> findGroupPicture(@RequestParam String accessionNumber) {
         List<String> groupData = dicomService.findGroupPicture(accessionNumber);
         return ResponseResult.success(groupData);
+    }
+
+    /**
+     * 分析报告
+     *
+     * @param accessionNumber 医院唯一标识号
+     * @return
+     */
+    @GetMapping("/dicom/findReport")
+    public ResponseResult<ReportDO> findReport(@RequestParam String accessionNumber) {
+        ReportDO res = dicomService.findReport(accessionNumber);
+        return ResponseResult.success(res);
     }
 }
