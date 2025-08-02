@@ -11,14 +11,14 @@ import com.pmp.infrastructure.util.DicomUtil;
 import com.pmp.infrastructure.util.FileUtil;
 import com.pmp.infrastructure.util.StreamUtil;
 import com.pmp.mapper.DicomMapper;
-import com.pmp.mapper.LabelDateMapper;
+import com.pmp.mapper.LabelDataMapper;
 import com.pmp.mapper.PatientMapper;
 import com.pmp.service.dicom.DicomService;
 import com.pmp.web.vo.DicomVO;
+import lombok.RequiredArgsConstructor;
 import org.dcm4che3.data.Attributes;
 import org.dcm4che3.data.Tag;
 import org.dcm4che3.io.DicomInputStream;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,21 +31,19 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 @Service
+@RequiredArgsConstructor
 public class DicomServiceImpl implements DicomService {
 
     private static final Logger logger = Logger.getLogger(DicomServiceImpl.class.getName());
 
-    private static String uploadUrl = "/opt/upload/";
+    private static final String uploadUrl = "/opt/upload/";
 
-    @Autowired
-    LabelDateMapper labelDateMapper;
-    @Autowired
-    PatientMapper patientMapper;
-    @Autowired
-    DicomMapper dicomMapper;
+    private final LabelDataMapper labelDataMapper;
+    private final PatientMapper patientMapper;
+    private final DicomMapper dicomMapper;
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {IOException.class, DicomException.class})
     public void saveDicom(MultipartFile file) throws IOException, DicomException {
         InputStream is = file.getInputStream();
         byte[] data = StreamUtil.getCopyInputStream(is);
@@ -61,13 +59,16 @@ public class DicomServiceImpl implements DicomService {
         patientDO.setBirthDay(attributes.getString(Tag.PatientBirthDate));
         //查询是否录入过当前病人信息，如果没有就新增数据
         PatientDO existPatient = patientMapper.selectPatientByPatientId(patientDO);
-        if (existPatient == null)
+        if (existPatient == null) {
             patientMapper.insertPatient(patientDO);
+        }
 
         //将dicom数据转为对象，如果之前存储过就不再处理
         DicomDO dicomDO = DicomUtil.changeAttributesToDicom(attributes);
         DicomDO existDicom = dicomMapper.selectDicomBySopInstanceUid(dicomDO);
-        if (!Objects.isNull(existDicom)) return;
+        if (!Objects.isNull(existDicom)) {
+            return;
+        }
 
         //将dicom文件存储到服务器
         String dicomPath = uploadUrl + dicomDO.getAccessionNumber() + "/" + FileUtil.getFileName(file, true);

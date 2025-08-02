@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 
 @Mapper
-public interface LabelDateMapper {
+public interface LabelDataMapper {
 
     /**
      * 新增病人CT的标注数据

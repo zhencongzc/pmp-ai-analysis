@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.pmp.mapper.LabelDateMapper">
+<mapper namespace="com.pmp.mapper.LabelDataMapper">
 
     <insert id="insertLabelData" parameterType="com.pmp.domain.labelData.LabelDataDO">
         INSERT INTO ct_label_data (id, computer_name, patient_id, label_data, create_time)

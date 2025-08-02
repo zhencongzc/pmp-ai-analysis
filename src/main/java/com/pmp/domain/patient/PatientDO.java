@@ -20,9 +20,9 @@ public class PatientDO {
      */
     private String patientName;
     /**
-     * 性别
+     * 性别 M-男，F-女
      */
-    private Integer sex;
+    private String sex;
     /**
      * 出生日期
      */
