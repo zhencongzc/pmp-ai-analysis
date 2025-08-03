@@ -3,6 +3,7 @@ package com.pmp.web;
 import com.pmp.domain.auth.LoginResultDTO;
 import com.pmp.infrastructure.pojo.ResponseCode;
 import com.pmp.infrastructure.pojo.ResponseResult;
+import com.pmp.infrastructure.util.TokenUtils;
 import com.pmp.service.auth.AuthService;
 import com.pmp.web.vo.LoginVO;
 import lombok.RequiredArgsConstructor;
@@ -60,7 +61,7 @@ public class AuthController {
     public ResponseResult<String> logout(HttpServletRequest request) {
         try {
             // 从请求头中获取token
-            String token = extractTokenFromRequest(request);
+            String token = TokenUtils.extractAuthorizationHeader(request);
 
             if (token != null && authService.logout(token)) {
                 return ResponseResult.success("登出成功");
@@ -72,17 +73,4 @@ public class AuthController {
         }
     }
 
-    /**
-     * 从请求中提取Bearer token
-     *
-     * @param request HTTP请求
-     * @return token字符串
-     */
-    private String extractTokenFromRequest(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
-        }
-        return null;
-    }
 }

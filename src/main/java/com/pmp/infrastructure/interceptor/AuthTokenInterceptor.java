@@ -1,5 +1,6 @@
 package com.pmp.infrastructure.interceptor;
 
+import com.pmp.infrastructure.util.TokenUtils;
 import com.pmp.service.auth.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,7 +19,7 @@ public class AuthTokenInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         // 提取token
-        String token = extractTokenFromRequest(request);
+        String token = TokenUtils.extractAuthorizationHeader(request);
         if (token == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;
@@ -33,11 +34,4 @@ public class AuthTokenInterceptor implements HandlerInterceptor {
         return true;
     }
 
-    private String extractTokenFromRequest(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (bearerToken != null) {
-            return bearerToken;
-        }
-        return null;
-    }
 }
