@@ -3,6 +3,7 @@ package com.pmp.web;
 import com.pixelmed.dicom.DicomException;
 import com.pmp.domain.dicom.DicomDO;
 import com.pmp.domain.report.ReportDO;
+import com.pmp.infrastructure.base.ResponseCode;
 import com.pmp.infrastructure.base.ResponseResult;
 import com.pmp.domain.labelData.LabelDataDTO;
 import com.pmp.web.vo.DicomVO;
@@ -10,6 +11,7 @@ import com.pmp.web.vo.LabelDataVO;
 import com.pmp.service.dicom.DicomService;
 import com.pmp.service.labelData.LabelDataService;
 import com.pmp.service.patient.PatientService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -22,17 +24,13 @@ import java.util.List;
  * CT管理模块
  */
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/ct-module")
 public class CTModuleController {
 
-    @Autowired
-    LabelDataService labelDataService;
-
-    @Autowired
-    PatientService patientService;
-
-    @Autowired
-    DicomService dicomService;
+    private final LabelDataService labelDataService;
+    private final PatientService patientService;
+    private final DicomService dicomService;
 
     /**
      * 添加病人CT的标注数据
@@ -69,7 +67,7 @@ public class CTModuleController {
                 dicomService.saveDicom(f);
             } catch (IOException | DicomException e) {
                 e.printStackTrace();
-                return ResponseResult.error(500, e.getMessage());
+                return ResponseResult.error(ResponseCode.INTERNAL_SERVER_ERROR.getCode(), e.getMessage());
             }
         }
         return ResponseResult.success();

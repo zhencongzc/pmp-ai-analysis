@@ -13,12 +13,12 @@ import java.io.Serializable;
 public class ResponseResult<T> implements Serializable {
 
     /**
-     * 状态码：200表示成功，非200表示错误（可自定义错误码规则）
+     * 状态码
      */
     private int code;
 
     /**
-     * 响应信息：成功/错误描述
+     * 响应信息
      */
     private String message;
 
@@ -49,7 +49,7 @@ public class ResponseResult<T> implements Serializable {
      * 成功响应（无数据，无计数）
      */
     public static <T> ResponseResult<T> success() {
-        return new ResponseResult<>(200, "操作成功", null, 0);
+        return new ResponseResult<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getMessage(), null, 0);
     }
 
     /**
@@ -58,7 +58,7 @@ public class ResponseResult<T> implements Serializable {
      * @param data 响应数据
      */
     public static <T> ResponseResult<T> success(T data) {
-        return new ResponseResult<>(200, "操作成功", data, 0);
+        return new ResponseResult<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getMessage(), data, 0);
     }
 
     /**
@@ -68,7 +68,7 @@ public class ResponseResult<T> implements Serializable {
      * @param count 数据总数
      */
     public static <T> ResponseResult<T> success(T data, long count) {
-        return new ResponseResult<>(200, "操作成功", data, count);
+        return new ResponseResult<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getMessage(), data, count);
     }
 
     /**
@@ -79,7 +79,7 @@ public class ResponseResult<T> implements Serializable {
      * @param count   数据总数
      */
     public static <T> ResponseResult<T> success(String message, T data, long count) {
-        return new ResponseResult<>(200, message, data, count);
+        return new ResponseResult<>(ResponseCode.SUCCESS.getCode(), message, data, count);
     }
 
     /**

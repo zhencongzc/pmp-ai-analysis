@@ -2,9 +2,11 @@ package com.pmp.web;
 
 import com.pmp.domain.dicom.DicomDO;
 import com.pmp.domain.patient.PatientDO;
+import com.pmp.infrastructure.base.ResponseCode;
 import com.pmp.infrastructure.base.ResponseResult;
 import com.pmp.service.patient.PatientService;
 import com.pmp.web.vo.PatientVO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,20 +16,22 @@ import java.util.List;
  * 病患管理
  */
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/patient")
 public class PatientController {
-    @Autowired
-    PatientService patientService;
+    private final PatientService patientService;
 
     /**
      * 查询病人列表
      *
-     * @param patientVO
+     * @param patientVO 病人信息
      * @return
      */
     @PostMapping("/findList")
     public ResponseResult<List<PatientDO>> findList(@RequestBody PatientVO patientVO) {
+        ResponseCode.SUCCESS.getMessage();
         return patientService.findList(patientVO);
+
     }
 
     /**
