@@ -1,4 +1,4 @@
-package com.pmp.infrastructure.base;
+package com.pmp.infrastructure.pojo;
 
 import lombok.Data;
 

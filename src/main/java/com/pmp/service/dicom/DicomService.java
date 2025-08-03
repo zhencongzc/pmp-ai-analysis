@@ -2,9 +2,8 @@ package com.pmp.service.dicom;
 
 import com.pixelmed.dicom.DicomException;
 import com.pmp.domain.dicom.DicomDO;
-import com.pmp.domain.labelData.LabelDataDTO;
 import com.pmp.domain.report.ReportDO;
-import com.pmp.infrastructure.base.ResponseResult;
+import com.pmp.infrastructure.pojo.ResponseResult;
 import com.pmp.web.vo.DicomVO;
 import org.springframework.web.multipart.MultipartFile;
 

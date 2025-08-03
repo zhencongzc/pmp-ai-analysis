@@ -6,7 +6,7 @@ import com.pixelmed.dicom.DicomException;
 import com.pmp.domain.dicom.DicomDO;
 import com.pmp.domain.patient.PatientDO;
 import com.pmp.domain.report.ReportDO;
-import com.pmp.infrastructure.base.ResponseResult;
+import com.pmp.infrastructure.pojo.ResponseResult;
 import com.pmp.infrastructure.util.DicomUtil;
 import com.pmp.infrastructure.util.FileUtil;
 import com.pmp.infrastructure.util.StreamUtil;

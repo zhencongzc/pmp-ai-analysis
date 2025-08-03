@@ -1,9 +1,8 @@
 package com.pmp.service.patient;
 
 
-import com.pmp.domain.dicom.DicomDO;
 import com.pmp.domain.patient.PatientDO;
-import com.pmp.infrastructure.base.ResponseResult;
+import com.pmp.infrastructure.pojo.ResponseResult;
 import com.pmp.web.vo.PatientVO;
 
 import java.util.List;

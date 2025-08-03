@@ -1,12 +1,9 @@
-package com.pmp.infrastructure.base;
+package com.pmp.infrastructure.pojo;
 
 import lombok.Getter;
 
 /**
  * 响应状态码枚举类
- *
- * @author Your Name
- * @date 2023-XX-XX
  */
 @Getter
 public enum ResponseCode {

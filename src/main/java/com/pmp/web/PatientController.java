@@ -1,13 +1,11 @@
 package com.pmp.web;
 
-import com.pmp.domain.dicom.DicomDO;
 import com.pmp.domain.patient.PatientDO;
-import com.pmp.infrastructure.base.ResponseCode;
-import com.pmp.infrastructure.base.ResponseResult;
+import com.pmp.infrastructure.pojo.ResponseCode;
+import com.pmp.infrastructure.pojo.ResponseResult;
 import com.pmp.service.patient.PatientService;
 import com.pmp.web.vo.PatientVO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

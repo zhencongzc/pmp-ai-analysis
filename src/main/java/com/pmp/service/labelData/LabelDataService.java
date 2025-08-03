@@ -1,6 +1,6 @@
 package com.pmp.service.labelData;
 
-import com.pmp.infrastructure.base.ResponseResult;
+import com.pmp.infrastructure.pojo.ResponseResult;
 import com.pmp.domain.labelData.LabelDataDTO;
 import com.pmp.web.vo.LabelDataVO;
 

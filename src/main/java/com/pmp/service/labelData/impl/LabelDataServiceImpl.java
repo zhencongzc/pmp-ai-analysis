@@ -3,14 +3,13 @@ package com.pmp.service.labelData.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.pmp.infrastructure.base.ResponseResult;
+import com.pmp.infrastructure.pojo.ResponseResult;
 import com.pmp.domain.labelData.LabelDataDO;
 import com.pmp.domain.labelData.LabelDataDTO;
 import com.pmp.web.vo.LabelDataVO;
 import com.pmp.mapper.LabelDataMapper;
 import com.pmp.service.labelData.LabelDataService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
