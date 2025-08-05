@@ -27,8 +27,8 @@ public class AuthServiceImpl implements AuthService {
 
     private static final Logger logger = Logger.getLogger(AuthServiceImpl.class.getName());
 
-    // 访问令牌过期时间（毫秒）- 30分钟
-    private static final long ACCESS_TOKEN_EXPIRATION = 30 * 60 * 1000;
+    // 访问令牌过期时间（毫秒）- 120分钟
+    private static final long ACCESS_TOKEN_EXPIRATION = 120 * 60 * 1000;
     // 刷新令牌过期时间（毫秒）- 7天
     private static final long REFRESH_TOKEN_EXPIRATION = 7 * 24 * 60 * 60 * 1000;
 

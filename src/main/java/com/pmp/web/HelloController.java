@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CyclicBarrier;
 
 @RestController
 public class HelloController {
@@ -17,10 +18,7 @@ public class HelloController {
     }
 
     public static void main(String[] args) {
-        CopyOnWriteArrayList<String> list = new CopyOnWriteArrayList<>();
 
-        List<String> source = Arrays.asList("a", "b", "c");
-        CopyOnWriteArrayList<String> list1 = new CopyOnWriteArrayList<>(source);
-        System.out.println(list1);
+
     }
 }
