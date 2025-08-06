@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.pmp.mapper.LabelDataMapper">
+<mapper namespace="com.pmp.infrastructure.mapper.LabelDataMapper">
 
-    <insert id="insertLabelData" parameterType="com.pmp.domain.labelData.LabelDataDO">
+    <insert id="insertLabelData" parameterType="com.pmp.domain.model.labelData.LabelDataDO">
         INSERT INTO ct_label_data (id, computer_name, patient_id, label_data, create_time)
         VALUES (null, #{computerName}, #{patientId}, #{labelData}, now())
     </insert>
 
-    <select id="selectLabelDataByCondition" parameterType="com.pmp.domain.labelData.LabelDataDO"
-            resultType="com.pmp.domain.labelData.LabelDataDO">
+    <select id="selectLabelDataByCondition" parameterType="com.pmp.domain.model.labelData.LabelDataDO"
+            resultType="com.pmp.domain.model.labelData.LabelDataDO">
         SELECT id,
         computer_name AS computerName,
         patient_id AS patientId,

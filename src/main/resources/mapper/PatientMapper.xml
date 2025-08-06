@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.pmp.mapper.PatientMapper">
+<mapper namespace="com.pmp.infrastructure.mapper.PatientMapper">
 
-    <insert id="insertPatient" parameterType="com.pmp.domain.patient.PatientDO">
+    <insert id="insertPatient" parameterType="com.pmp.domain.model.patient.PatientDO">
         INSERT INTO patient (id, patient_id, patient_name, sex, birth_day, create_time)
         VALUES (null, #{patientId}, #{patientName}, #{sex}, #{birthDay}, now())
     </insert>
 
-    <select id="selectPatientById" parameterType="com.pmp.domain.patient.PatientDO"
-            resultType="com.pmp.domain.patient.PatientDO">
+    <select id="selectPatientById" parameterType="com.pmp.domain.model.patient.PatientDO"
+            resultType="com.pmp.domain.model.patient.PatientDO">
         SELECT id,
                patient_id   AS patientId,
                patient_name AS patientName,
@@ -19,8 +19,8 @@
         WHERE id = #{id}
     </select>
 
-    <select id="selectPatientByPatientId" parameterType="com.pmp.domain.patient.PatientDO"
-            resultType="com.pmp.domain.patient.PatientDO">
+    <select id="selectPatientByPatientId" parameterType="com.pmp.domain.model.patient.PatientDO"
+            resultType="com.pmp.domain.model.patient.PatientDO">
         SELECT id,
                patient_id   AS patientId,
                patient_name AS patientName,
@@ -31,7 +31,7 @@
         WHERE patient_id = #{patientId}
     </select>
 
-    <select id="findPatientByCondition" resultType="com.pmp.domain.patient.PatientDO">
+    <select id="findPatientByCondition" resultType="com.pmp.domain.model.patient.PatientDO">
         SELECT id,
         patient_id AS patientId,
         patient_name AS patientName,

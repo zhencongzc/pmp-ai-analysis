@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.pmp.mapper.DicomMapper">
+<mapper namespace="com.pmp.infrastructure.mapper.DicomMapper">
 
-    <insert id="insertDicom" parameterType="com.pmp.domain.dicom.DicomDO">
+    <insert id="insertDicom" parameterType="com.pmp.domain.model.dicom.DicomDO">
         INSERT INTO ct_dicom (id, sop_instance_uid, patient_id, patient_name, accession_number,
                               study_id, series_number, instance_number,
                               series_date, series_time, study_description,
@@ -14,8 +14,8 @@
                 #{modality}, #{seriesDescription}, #{rows}, #{columns}, #{dicomPath}, #{pngPath}, now())
     </insert>
 
-    <select id="selectDicomBySopInstanceUid" parameterType="com.pmp.domain.dicom.DicomDO"
-            resultType="com.pmp.domain.dicom.DicomDO">
+    <select id="selectDicomBySopInstanceUid" parameterType="com.pmp.domain.model.dicom.DicomDO"
+            resultType="com.pmp.domain.model.dicom.DicomDO">
         SELECT id,
                sop_instance_uid   AS sopInstanceUid,
                patient_id         AS patientId,
@@ -36,8 +36,8 @@
         WHERE sop_instance_uid = #{sopInstanceUid}
     </select>
 
-    <select id="findDicomByCondition" parameterType="com.pmp.web.vo.DicomVO"
-            resultType="com.pmp.domain.dicom.DicomDO">
+    <select id="findDicomByCondition" parameterType="com.pmp.interfaces.web.vo.DicomVO"
+            resultType="com.pmp.domain.model.dicom.DicomDO">
         SELECT id,
         sop_instance_uid AS sopInstanceUid,
         patient_id AS patientId,
@@ -73,8 +73,8 @@
         </where>
         ORDER BY create_time DESC
     </select>
-    <select id="findDicomById" parameterType="com.pmp.web.vo.DicomVO"
-            resultType="com.pmp.domain.dicom.DicomDO">
+    <select id="findDicomById" parameterType="com.pmp.interfaces.web.vo.DicomVO"
+            resultType="com.pmp.domain.model.dicom.DicomDO">
         SELECT id,
                sop_instance_uid   AS sopInstanceUid,
                patient_id         AS patientId,
@@ -104,7 +104,7 @@
         ORDER BY instance_number
     </select>
 
-    <select id="findReport" resultType="com.pmp.domain.report.ReportDO">
+    <select id="findReport" resultType="com.pmp.domain.model.report.ReportDO">
         SELECT id,
                patient_id           AS patientId,
                patient_name         AS patientName,
