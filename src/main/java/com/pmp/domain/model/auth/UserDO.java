@@ -37,6 +37,11 @@ public class UserDO {
     private String phone;
 
     /**
+     * 角色
+     */
+    private String role;
+
+    /**
      * 用户真实姓名或昵称
      */
     private String fullName;

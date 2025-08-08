@@ -1,6 +1,7 @@
 package com.pmp.interfaces.web;
 
 import com.pixelmed.dicom.DicomException;
+import com.pmp.domain.model.auth.RequiresRoles;
 import com.pmp.domain.model.dicom.DicomDO;
 import com.pmp.domain.model.report.ReportDO;
 import com.pmp.common.pojo.ResponseCode;
@@ -59,6 +60,7 @@ public class CTModuleController {
      *
      * @return
      */
+    @RequiresRoles("admin")
     @PostMapping(value = "/dicom/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseResult<String> uploadDicomFile(@RequestParam("file") MultipartFile file[]) {
         for (MultipartFile f : file) {
@@ -101,6 +103,7 @@ public class CTModuleController {
      * @param accessionNumber 医院唯一标识号
      * @return
      */
+    @RequiresRoles({"admin", "user"})
     @GetMapping("/dicom/findGroupPicture")
     public ResponseResult<List<String>> findGroupPicture(@RequestParam String accessionNumber) {
         List<String> groupData = dicomService.findGroupPicture(accessionNumber);
@@ -113,6 +116,7 @@ public class CTModuleController {
      * @param accessionNumber 医院唯一标识号
      * @return
      */
+    @RequiresRoles({"admin", "user"})
     @GetMapping("/dicom/findReport")
     public ResponseResult<ReportDO> findReport(@RequestParam String accessionNumber) {
         ReportDO res = dicomService.findReport(accessionNumber);
