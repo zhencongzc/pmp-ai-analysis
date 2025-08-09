@@ -1,0 +1,12 @@
+
+vim /etc/nginx/nginx.conf
+sudo nginx -t  # 检查配置语法
+sudo systemctl reload nginx  # 重载配置
+
+mvn install:install-file  -Dfile=D:\Program\pmp-ai-analysis\lib\dcm4che-imageio-5.34.0.jar -DgroupId=org.dcm4che -DartifactId=dcm4che-imageio -Dversion=5.34.0 -Dpackaging=jar -DgeneratePom=true
+
+
+scp D:\Program\pmp-ai-analysis\target\pmp-ai-analysis-1.0-SNAPSHOT.jar root@60.205.166.16:/opt/pmp-ai-analysis
+
+
+sudo chmod -R 755 /opt/pmp-ai-analysis-web

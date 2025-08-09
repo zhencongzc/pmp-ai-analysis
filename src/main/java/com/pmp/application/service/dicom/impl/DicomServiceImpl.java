@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.dcm4che3.data.Attributes;
 import org.dcm4che3.data.Tag;
 import org.dcm4che3.io.DicomInputStream;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,7 +37,8 @@ public class DicomServiceImpl implements DicomService {
 
     private static final Logger logger = Logger.getLogger(DicomServiceImpl.class.getName());
 
-    private static final String uploadUrl = "/opt/upload/";
+    @Value("${document.upload.path}")
+    private String uploadPath;
 
     private final LabelDataMapper labelDataMapper;
     private final PatientMapper patientMapper;
@@ -71,11 +73,11 @@ public class DicomServiceImpl implements DicomService {
         }
 
         //将dicom文件存储到服务器
-        String dicomPath = uploadUrl + dicomDO.getAccessionNumber() + "/" + FileUtil.getFileName(file, true);
+        String dicomPath = uploadPath + dicomDO.getAccessionNumber() + "/" + FileUtil.getFileName(file, true);
         StreamUtil.saveInputStreamToFile(new ByteArrayInputStream(data), dicomPath);
         //在当前路径，将dicom转为png
         String dicomName = FileUtil.getFileName(file, false);
-        String pngPath = uploadUrl + dicomDO.getAccessionNumber() + "/" + dicomName + ".png";
+        String pngPath = uploadPath + dicomDO.getAccessionNumber() + "/" + dicomName + ".png";
         DicomUtil.convertDicomToPng(dicomPath, pngPath);
 
         //新增dicom数据

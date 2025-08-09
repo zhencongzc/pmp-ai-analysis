@@ -1,4 +1,4 @@
-# 配置文件
+# 配置文件（阿里云服务器）
 server:
   ip: 127.0.0.1
   port: 8081
@@ -15,7 +15,7 @@ spring:
       driver-class-name: com.mysql.jdbc.Driver
       url: jdbc:mysql://${server.ip}:3306/pmp_ai_analysis?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
       username: root
-      password: root
+      password: Zc@123456
 
 # redis相关
 redis.addrs: ${server.ip}:6379
@@ -34,4 +34,4 @@ logging:
 # 自定义参数
 document:
   upload:
-    path: /opt/upload/
+    path: /mc/opt/upload/

@@ -1,4 +1,4 @@
-# 配置文件
+# 配置文件（生产环境）
 server:
   ip: 60.205.166.16
   port: 8081
@@ -14,12 +14,12 @@ spring:
     pmp-ai-analysis:
       driver-class-name: com.mysql.jdbc.Driver
       url: jdbc:mysql://${server.ip}:3306/pmp_ai_analysis?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
-      username: admin
+      username: root
       password: Zc@123456
 
 # redis相关
-redis.addrs: 60.205.166.16:6379
-redis.passwd: Zc@123456
+redis.addrs: ${server.ip}:6379
+redis.passwd: 123456
 redis.cluster:
 
 # 日志相关
@@ -30,3 +30,8 @@ logging:
       springframework:
         jdbc:
           core: debug
+
+# 自定义参数
+document:
+  upload:
+    path: /opt/upload/
