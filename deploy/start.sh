@@ -1,6 +1,6 @@
 #!/bin/bash
 APP_NAME=pmp-ai-analysis-1.0-SNAPSHOT.jar
-APP_PATH=/opt/pmp-ai-analysis
+APP_PATH=/mc/opt/pmp-ai-analysis
 
 # 停止已运行的实例
 if [ -f "$APP_PATH/pid.txt" ]; then
