@@ -3,6 +3,7 @@ package com.pmp.common.interceptor;
 import com.pmp.common.util.TokenUtils;
 import com.pmp.application.service.auth.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -15,8 +16,16 @@ public class AuthTokenInterceptor implements HandlerInterceptor {
 
     private final AuthService authService;
 
+    @Value("${isDev}")
+    private boolean isDev;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+
+        // 开发环境关掉拦截器，方便测试
+        if (isDev) {
+            return true;
+        }
 
         // 提取token
         String token = TokenUtils.extractAuthorizationHeader(request);

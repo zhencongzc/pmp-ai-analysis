@@ -7,11 +7,13 @@ import com.pmp.domain.model.report.ReportDO;
 import com.pmp.common.pojo.ResponseCode;
 import com.pmp.common.pojo.ResponseResult;
 import com.pmp.domain.model.labelData.LabelDataDTO;
+import com.pmp.interfaces.web.assembler.ReportConverter;
 import com.pmp.interfaces.web.vo.DicomVO;
 import com.pmp.interfaces.web.vo.LabelDataVO;
 import com.pmp.application.service.dicom.DicomService;
 import com.pmp.application.service.labelData.LabelDataService;
 import com.pmp.application.service.patient.PatientService;
+import com.pmp.interfaces.web.vo.ReportVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -118,8 +120,13 @@ public class CTModuleController {
      */
     @RequiresRoles({"admin", "user"})
     @GetMapping("/dicom/findReport")
-    public ResponseResult<ReportDO> findReport(@RequestParam String accessionNumber) {
-        ReportDO res = dicomService.findReport(accessionNumber);
-        return ResponseResult.success(res);
+    public ResponseResult<ReportVO> findReport(@RequestParam String accessionNumber) {
+        // 获取DO对象
+        ReportDO reportDO = dicomService.findReport(accessionNumber);
+
+        // 转换为VO对象
+        ReportVO reportVO = ReportConverter.toVO(reportDO);
+
+        return ResponseResult.success(reportVO);
     }
 }

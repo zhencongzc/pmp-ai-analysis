@@ -1,4 +1,4 @@
-# 配置文件（阿里云服务器）
+# 配置文件（生产环境）
 server:
   ip: 127.0.0.1
   port: 8081
@@ -32,6 +32,10 @@ logging:
           core: debug
 
 # 自定义参数
+# 文件上传地址
 document:
   upload:
-    path: /mc/opt/upload/
+    path: /opt/upload/
+
+# 是否是开发环境
+isDev: false

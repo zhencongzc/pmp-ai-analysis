@@ -1,4 +1,4 @@
-package com.pmp.domain.model.report;
+package com.pmp.interfaces.web.vo;
 
 import lombok.Data;
 
@@ -6,7 +6,7 @@ import lombok.Data;
  * CT分析报告
  */
 @Data
-public class ReportDO {
+public class ReportVO {
     /**
      * 主键ID
      */
@@ -40,12 +40,12 @@ public class ReportDO {
     /**
      * 病理分类
      */
-    private Integer diseaseType;
+    private String diseaseType;
 
     /**
      * 病理分级
      */
-    private Integer diseaseLevel;
+    private String diseaseLevel;
 
     /**
      * 肠系膜挛缩
