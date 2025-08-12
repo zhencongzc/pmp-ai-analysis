@@ -27,6 +27,12 @@ public class AuthTokenInterceptor implements HandlerInterceptor {
             return true;
         }
 
+        // 处理跨域预检请求(OPTIONS)，直接放行
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            response.setStatus(HttpServletResponse.SC_OK);
+            return true;
+        }
+
         // 提取token
         String token = TokenUtils.extractAuthorizationHeader(request);
         if (token == null) {
