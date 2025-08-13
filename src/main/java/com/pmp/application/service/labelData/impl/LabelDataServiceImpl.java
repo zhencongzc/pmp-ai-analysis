@@ -24,6 +24,11 @@ public class LabelDataServiceImpl implements LabelDataService {
 
     private final LabelDataMapper labelDataMapper;
 
+    /**
+     * 新增病人CT的标注数据
+     *
+     * @param labelDataVO
+     */
     @Override
     public void addLabelData(LabelDataVO labelDataVO) {
         LabelDataDO labelDataDO = new LabelDataDO();
@@ -33,6 +38,12 @@ public class LabelDataServiceImpl implements LabelDataService {
         labelDataMapper.insertLabelData(labelDataDO);
     }
 
+    /**
+     * 查询病人CT的标注数据
+     *
+     * @param labelDataVO
+     * @return
+     */
     @Override
     public ResponseResult<List<LabelDataDTO>> findLabelData(LabelDataVO labelDataVO) {
         Page<Object> page = PageHelper.startPage(labelDataVO.getPage(), labelDataVO.getPageRow(), true);

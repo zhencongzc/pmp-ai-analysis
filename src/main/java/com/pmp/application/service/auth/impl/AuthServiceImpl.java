@@ -38,6 +38,13 @@ public class AuthServiceImpl implements AuthService {
     // 黑名单存储（实际项目中建议使用Redis）
     private Set<String> tokenBlacklist = ConcurrentHashMap.newKeySet();
 
+    /**
+     * 用户登录认证
+     *
+     * @param username 用户名
+     * @param password 密码
+     * @return 登录结果
+     */
     @Override
     public LoginResultDTO login(String username, String password) throws AuthenticationException {
         // 查询用户信息

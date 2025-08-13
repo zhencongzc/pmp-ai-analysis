@@ -21,6 +21,12 @@ public class PatientServiceImpl implements PatientService {
 
     private final PatientMapper patientMapper;
 
+    /**
+     * 查询病人列表
+     *
+     * @param patientVO
+     * @return
+     */
     @Override
     public ResponseResult<List<PatientDO>> findList(PatientVO patientVO) {
         Page<Object> page = PageHelper.startPage(patientVO.getPage(), patientVO.getPageRow(), true);
@@ -28,6 +34,12 @@ public class PatientServiceImpl implements PatientService {
         return ResponseResult.success(list, page.getTotal());
     }
 
+    /**
+     * 查询病人详情
+     *
+     * @param id
+     * @return
+     */
     @Override
     public PatientDO findPatientDetail(Integer id) {
         return patientMapper.selectPatientById(id);

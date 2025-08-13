@@ -44,6 +44,11 @@ public class DicomServiceImpl implements DicomService {
     private final PatientMapper patientMapper;
     private final DicomMapper dicomMapper;
 
+    /**
+     * 保存病人的dicom文件
+     *
+     * @param file
+     */
     @Override
     @Transactional(rollbackFor = {IOException.class, DicomException.class})
     public void saveDicom(MultipartFile file) throws IOException, DicomException {
@@ -86,6 +91,13 @@ public class DicomServiceImpl implements DicomService {
         dicomMapper.insertDicom(dicomDO);
     }
 
+    /**
+     * 查询dicom列表
+     * 以accessionNumber为纬度做分组展示
+     *
+     * @param dicomVO
+     * @return
+     */
     @Override
     public ResponseResult<List<DicomDO>> findDicom(DicomVO dicomVO) {
         Page<Object> page = PageHelper.startPage(dicomVO.getPage(), dicomVO.getPageRow(), true);
@@ -93,6 +105,12 @@ public class DicomServiceImpl implements DicomService {
         return ResponseResult.success(list, page.getTotal());
     }
 
+    /**
+     * 查看dicom详情
+     *
+     * @param id
+     * @return
+     */
     @Override
     public DicomDO findDicomDetail(Integer id) {
         DicomVO dicomVO = new DicomVO();
@@ -100,11 +118,23 @@ public class DicomServiceImpl implements DicomService {
         return dicomMapper.findDicomById(dicomVO);
     }
 
+    /**
+     * 根据医院唯一标识号查询整组图片
+     *
+     * @param accessionNumber 医院唯一标识号
+     * @return
+     */
     @Override
     public List<String> findGroupPicture(String accessionNumber) {
         return dicomMapper.findGroupPictureByAccessionNumber(accessionNumber);
     }
 
+    /**
+     * 根据医院唯一标识号查询CT分析报告
+     *
+     * @param accessionNumber
+     * @return
+     */
     @Override
     public ReportDO findReport(String accessionNumber) {
         return dicomMapper.findReport(accessionNumber);
