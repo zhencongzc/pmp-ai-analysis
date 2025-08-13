@@ -2,6 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pmp.infrastructure.mapper.DicomMapper">
 
+    <resultMap id="dicomResultMap" type="com.pmp.domain.model.dicom.DicomDO">
+        <id property="id" column="id"/>
+        <result property="sopInstanceUid" column="sop_instance_uid"/>
+        <result property="patientId" column="patient_id"/>
+        <result property="patientName" column="patient_name"/>
+        <result property="accessionNumber" column="accession_number"/>
+        <result property="studyId" column="study_id"/>
+        <result property="seriesNumber" column="series_number"/>
+        <result property="instanceNumber" column="instance_number"/>
+        <result property="seriesDate" column="series_date"/>
+        <result property="seriesTime" column="series_time"/>
+        <result property="studyDescription" column="study_description"/>
+        <result property="modality" column="modality"/>
+        <result property="seriesDescription" column="series_description"/>
+        <result property="rows" column="rows"/>
+        <result property="columns" column="columns"/>
+        <result property="dicomPath" column="dicom_path"/>
+        <result property="pngPath" column="png_path"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
     <insert id="insertDicom" parameterType="com.pmp.domain.model.dicom.DicomDO">
         INSERT INTO ct_dicom (id, sop_instance_uid, patient_id, patient_name, accession_number,
                               study_id, series_number, instance_number,
@@ -37,7 +58,7 @@
     </select>
 
     <select id="findDicomByCondition" parameterType="com.pmp.interfaces.web.vo.DicomVO"
-            resultType="com.pmp.domain.model.dicom.DicomDO">
+            resultType="com.pmp.domain.model.dicom.DicomGroupDO">
         SELECT id,
         sop_instance_uid AS sopInstanceUid,
         patient_id AS patientId,
@@ -73,6 +94,49 @@
         </where>
         ORDER BY create_time DESC
     </select>
+
+    <select id="findDicomGroupByCondition" parameterType="com.pmp.interfaces.web.vo.DicomVO"
+            resultMap="dicomResultMap">
+        SELECT
+        MIN(id) AS id,
+        MAX(sop_instance_uid) AS sopInstanceUid,
+        MAX(patient_id) AS patientId,
+        MAX(patient_name) AS patientName,
+        accession_number AS accessionNumber,
+        MAX(study_id) AS studyId,
+        MAX(series_number) AS seriesNumber,
+        MAX(instance_number) AS instanceNumber,
+        MAX(series_date) AS seriesDate,
+        MAX(series_time) AS seriesTime,
+        MAX(study_description) AS studyDescription,
+        MAX(modality) AS modality,
+        MAX(series_description) AS seriesDescription,
+        MAX(rows) AS rows,
+        MAX(columns) AS columns,
+        MAX(dicom_path) AS dicomPath,
+        MAX(png_path) AS pngPath,
+        MAX(create_time) AS createTime,
+        GROUP_CONCAT(instance_number ORDER BY instance_number ASC SEPARATOR ',') AS instanceNumbers,
+        COUNT(*) AS count
+        FROM ct_dicom
+        GROUP BY accession_number
+        <where>
+            <if test="patientId != null and patientId != ''">
+                AND patient_id LIKE CONCAT('%', #{patientId}, '%')
+            </if>
+            <if test="patientName != null and patientName != ''">
+                AND patient_name LIKE CONCAT('%', #{patientName}, '%')
+            </if>
+            <if test="dateStart != null and dateStart != ''">
+                AND create_time &gt;= #{dateStart}
+            </if>
+            <if test="dateEnd != null and dateEnd != ''">
+                AND create_time &lt;= #{dateEnd}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
     <select id="findDicomById" parameterType="com.pmp.interfaces.web.vo.DicomVO"
             resultType="com.pmp.domain.model.dicom.DicomDO">
         SELECT id,
