@@ -35,7 +35,7 @@ logging:
 # 文件上传地址
 document:
   upload:
-    path: /opt/upload/
+    path: /mc/opt/upload/
 
 # 是否是开发环境
 isDev: false

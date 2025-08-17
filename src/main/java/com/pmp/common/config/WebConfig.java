@@ -18,6 +18,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns(
                         "/test/**",
+                        "/ct-module/dicom/analysis/callback",
                         "/auth/login",
                         "/auth/logout"
                 );

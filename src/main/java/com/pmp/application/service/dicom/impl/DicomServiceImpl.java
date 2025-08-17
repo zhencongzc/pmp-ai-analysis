@@ -1,5 +1,6 @@
 package com.pmp.application.service.dicom.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.pixelmed.dicom.DicomException;
@@ -138,5 +139,14 @@ public class DicomServiceImpl implements DicomService {
     @Override
     public ReportDO findReport(String accessionNumber) {
         return dicomMapper.findReport(accessionNumber);
+    }
+
+    /**
+     * 大模型分析后回调接口
+     * 回传是否成功标记和对应的唯一标识号
+     */
+    @Override
+    public ResponseResult<String> dicomAnalysisCallback(Integer isSuccess, String accessionNumber) {
+        return ResponseResult.success();
     }
 }

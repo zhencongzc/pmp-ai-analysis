@@ -1,5 +1,6 @@
 package com.pmp.interfaces.web;
 
+import com.alibaba.fastjson.JSONObject;
 import com.pixelmed.dicom.DicomException;
 import com.pmp.domain.model.auth.RequiresRoles;
 import com.pmp.domain.model.dicom.DicomDO;
@@ -128,5 +129,13 @@ public class CTModuleController {
         ReportVO reportVO = ReportConverter.toVO(reportDO);
 
         return ResponseResult.success(reportVO);
+    }
+
+    /**
+     * 大模型分析后回调接口
+     */
+    @GetMapping("/dicom/analysis/callback")
+    public ResponseResult<String> dicomAnalysisCallback(@RequestParam Integer isSuccess, @RequestParam String accessionNumber) {
+        return dicomService.dicomAnalysisCallback(isSuccess, accessionNumber);
     }
 }

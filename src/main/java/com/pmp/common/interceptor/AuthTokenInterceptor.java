@@ -37,12 +37,16 @@ public class AuthTokenInterceptor implements HandlerInterceptor {
         String token = TokenUtils.extractAuthorizationHeader(request);
         if (token == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json;charset=utf-8");
+            response.getWriter().write("{\"error\":\"Missing authorization token\",\"message\":\"请求缺少认证令牌\"}");
             return false;
         }
 
         // 检查token是否有效且不在黑名单中
         if (!authService.validateToken(token) || authService.isTokenBlacklisted(token)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json;charset=utf-8");
+            response.getWriter().write("{\"error\":\"Invalid or expired token\",\"message\":\"令牌无效或已过期\"}");
             return false;
         }
 
