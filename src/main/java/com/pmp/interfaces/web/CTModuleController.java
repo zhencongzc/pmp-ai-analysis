@@ -66,14 +66,22 @@ public class CTModuleController {
     @RequiresRoles("admin")
     @PostMapping(value = "/dicom/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseResult<String> uploadDicomFile(@RequestParam("file") MultipartFile file[]) {
+        String accessionNumber = "";
+        //将文件存储在服务器
         for (MultipartFile f : file) {
             try {
-                dicomService.saveDicom(f);
+                accessionNumber = dicomService.saveDicom(f);
             } catch (IOException | DicomException e) {
                 e.printStackTrace();
                 return ResponseResult.error(ResponseCode.INTERNAL_SERVER_ERROR.getCode(), e.getMessage());
             }
         }
+
+        //调用大模型分析dimcom文件
+        if (!accessionNumber.isEmpty()) {
+            dicomService.dicomAnalysisFeign(accessionNumber);
+        }
+
         return ResponseResult.success();
     }
 
@@ -137,5 +145,14 @@ public class CTModuleController {
     @GetMapping("/dicom/analysis/callback")
     public ResponseResult<String> dicomAnalysisCallback(@RequestParam Integer isSuccess, @RequestParam String accessionNumber) {
         return dicomService.dicomAnalysisCallback(isSuccess, accessionNumber);
+    }
+
+
+    /**
+     * 大模型分析（PCI）回调接口
+     */
+    @PostMapping("/dicom/analysis-pci/callback")
+    public ResponseResult<String> dicomAnalysisPciCallback(@RequestBody ReportDO reportDO) {
+        return dicomService.dicomAnalysisPciCallback(reportDO);
     }
 }

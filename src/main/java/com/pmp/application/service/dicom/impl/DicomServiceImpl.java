@@ -1,9 +1,9 @@
 package com.pmp.application.service.dicom.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.pixelmed.dicom.DicomException;
+import com.pmp.common.util.HttpUtil;
 import com.pmp.domain.model.dicom.DicomDO;
 import com.pmp.domain.model.patient.PatientDO;
 import com.pmp.domain.model.report.ReportDO;
@@ -17,26 +17,34 @@ import com.pmp.infrastructure.mapper.PatientMapper;
 import com.pmp.application.service.dicom.DicomService;
 import com.pmp.interfaces.web.vo.DicomVO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.dcm4che3.data.Attributes;
 import org.dcm4che3.data.Tag;
 import org.dcm4che3.io.DicomInputStream;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class DicomServiceImpl implements DicomService {
-
-    private static final Logger logger = Logger.getLogger(DicomServiceImpl.class.getName());
 
     @Value("${document.upload.path}")
     private String uploadPath;
@@ -51,8 +59,8 @@ public class DicomServiceImpl implements DicomService {
      * @param file
      */
     @Override
-    @Transactional(rollbackFor = {IOException.class, DicomException.class})
-    public void saveDicom(MultipartFile file) throws IOException, DicomException {
+    @Transactional(rollbackFor = {Exception.class})
+    public String saveDicom(MultipartFile file) throws IOException, DicomException {
         InputStream is = file.getInputStream();
         byte[] data = StreamUtil.getCopyInputStream(is);
         //读取DICOM元数据
@@ -74,22 +82,24 @@ public class DicomServiceImpl implements DicomService {
         //将dicom数据转为对象，如果之前存储过就不再处理
         DicomDO dicomDO = DicomUtil.changeAttributesToDicom(attributes);
         DicomDO existDicom = dicomMapper.selectDicomBySopInstanceUid(dicomDO);
+        String accessionNumber = dicomDO.getAccessionNumber();
         if (!Objects.isNull(existDicom)) {
-            return;
+            return accessionNumber;
         }
 
         //将dicom文件存储到服务器
-        String dicomPath = uploadPath + dicomDO.getAccessionNumber() + "/" + FileUtil.getFileName(file, true);
+        String dicomPath = uploadPath + accessionNumber + "/" + FileUtil.getFileName(file, true);
         StreamUtil.saveInputStreamToFile(new ByteArrayInputStream(data), dicomPath);
-        //在当前路径，将dicom转为png
-        String dicomName = FileUtil.getFileName(file, false);
-        String pngPath = uploadPath + dicomDO.getAccessionNumber() + "/" + dicomName + ".png";
-        DicomUtil.convertDicomToPng(dicomPath, pngPath);
+
+        //先将处理后的dicom文件和png地址存储起来
+        String dicomPathNew = uploadPath + accessionNumber + "/result/" + accessionNumber + "_" + FileUtil.getFileName(file, true);
+        String pngPath = uploadPath + accessionNumber + "/result/" + accessionNumber + "_" + FileUtil.getFileName(file, false) + ".png";
+        dicomDO.setDicomPath(dicomPathNew);
+        dicomDO.setPngPath(pngPath);
 
         //新增dicom数据
-        dicomDO.setDicomPath(dicomPath);
-        dicomDO.setPngPath(pngPath);
         dicomMapper.insertDicom(dicomDO);
+        return accessionNumber;
     }
 
     /**
@@ -147,6 +157,56 @@ public class DicomServiceImpl implements DicomService {
      */
     @Override
     public ResponseResult<String> dicomAnalysisCallback(Integer isSuccess, String accessionNumber) {
+        if (isSuccess != 1) {
+            return ResponseResult.error(500, "分析失败");
+        }
+
+        //获取处理后的，将dicom转为png
+        File uploadDir = new File(uploadPath + accessionNumber + "/result");
+        if (uploadDir.exists() && uploadDir.isDirectory()) {
+            File[] files = uploadDir.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    String dicomPath = file.getAbsolutePath();
+                    String pngPath = dicomPath.replace(".dcm", ".png");
+                    try {
+                        DicomUtil.convertDicomToPng(dicomPath, pngPath);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return ResponseResult.error(500, "转换失败");
+                    }
+                }
+            }
+        }
         return ResponseResult.success();
+    }
+
+    /**
+     * 大模型分析（PCI）回调接口
+     * 回传分析报告
+     */
+    @Override
+    public ResponseResult<String> dicomAnalysisPciCallback(ReportDO reportDO) {
+        return ResponseResult.success();
+    }
+
+    /**
+     * 调用大模型分析dimcom文件
+     *
+     * @param accessionNumber
+     */
+    @Override
+    public void dicomAnalysisFeign(String accessionNumber) {
+        String url = "http://192.168.5.126:8000/ct-module/dicom/analysis";
+        // 构造请求体
+        Map<String, String> requestBody = Collections.singletonMap("dicomUrl", uploadPath + accessionNumber);
+        try {
+            // 发送POST请求
+            String response = HttpUtil.post(url, requestBody);
+            log.info("DICOM分析请求响应: {}", response);
+        } catch (Exception e) {
+            log.error("发送DICOM分析请求失败", e);
+            return;
+        }
     }
 }
