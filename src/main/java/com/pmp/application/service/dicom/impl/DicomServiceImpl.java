@@ -164,7 +164,7 @@ public class DicomServiceImpl implements DicomService {
         }
 
         //获取处理后的，将dicom转为png
-        File uploadDir = new File(uploadPath + accessionNumber + "/result");
+        File uploadDir = new File(uploadPath + accessionNumber + "/result/sc_dicom");
         if (uploadDir.exists() && uploadDir.isDirectory()) {
             File[] files = uploadDir.listFiles();
             if (files != null) {
