@@ -58,7 +58,7 @@
     </select>
 
     <select id="findDicomByCondition" parameterType="com.pmp.interfaces.web.vo.DicomVO"
-            resultType="com.pmp.domain.model.dicom.DicomGroupDO">
+            resultType="com.pmp.domain.model.dicom.DicomDO">
         SELECT id,
         sop_instance_uid AS sopInstanceUid,
         patient_id AS patientId,

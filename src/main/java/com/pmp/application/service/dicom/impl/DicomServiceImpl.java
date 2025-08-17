@@ -92,8 +92,8 @@ public class DicomServiceImpl implements DicomService {
         StreamUtil.saveInputStreamToFile(new ByteArrayInputStream(data), dicomPath);
 
         //先将处理后的dicom文件和png地址存储起来
-        String dicomPathNew = uploadPath + accessionNumber + "/result/" + accessionNumber + "_" + FileUtil.getFileName(file, true);
-        String pngPath = uploadPath + accessionNumber + "/result/" + accessionNumber + "_" + FileUtil.getFileName(file, false) + ".png";
+        String dicomPathNew = uploadPath + accessionNumber + "/result/sc_dicom/" + accessionNumber + "_" + FileUtil.getFileName(file, false) + "_sc.dcm";
+        String pngPath = uploadPath + accessionNumber + "/result/sc_dicom/" + accessionNumber + "_" + FileUtil.getFileName(file, false) + "_sc.png";
         dicomDO.setDicomPath(dicomPathNew);
         dicomDO.setPngPath(pngPath);
 
@@ -148,7 +148,8 @@ public class DicomServiceImpl implements DicomService {
      */
     @Override
     public ReportDO findReport(String accessionNumber) {
-        return dicomMapper.findReport(accessionNumber);
+        //todo 等待集成
+        return dicomMapper.findReport("20241225004460");
     }
 
     /**
@@ -157,6 +158,7 @@ public class DicomServiceImpl implements DicomService {
      */
     @Override
     public ResponseResult<String> dicomAnalysisCallback(Integer isSuccess, String accessionNumber) {
+        log.info("收到回调请求，isSuccess：{}，accessionNumber：{}", isSuccess, accessionNumber);
         if (isSuccess != 1) {
             return ResponseResult.error(500, "分析失败");
         }
@@ -200,13 +202,7 @@ public class DicomServiceImpl implements DicomService {
         String url = "http://192.168.5.126:8000/ct-module/dicom/analysis";
         // 构造请求体
         Map<String, String> requestBody = Collections.singletonMap("dicomUrl", uploadPath + accessionNumber);
-        try {
-            // 发送POST请求
-            String response = HttpUtil.post(url, requestBody);
-            log.info("DICOM分析请求响应: {}", response);
-        } catch (Exception e) {
-            log.error("发送DICOM分析请求失败", e);
-            return;
-        }
+        // 发送POST请求
+        HttpUtil.post(url, requestBody);
     }
 }
