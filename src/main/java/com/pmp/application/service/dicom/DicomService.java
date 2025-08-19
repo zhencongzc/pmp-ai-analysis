@@ -71,5 +71,5 @@ public interface DicomService {
      * 调用大模型分析dimcom文件
      * @param accessionNumber
      */
-    void dicomAnalysisFeign(String accessionNumber);
+    ResponseResult<String> dicomAnalysisFeign(String accessionNumber);
 }

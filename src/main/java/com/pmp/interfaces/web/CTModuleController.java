@@ -79,7 +79,7 @@ public class CTModuleController {
 
         //调用大模型分析dimcom文件
         if (!accessionNumber.isEmpty()) {
-            dicomService.dicomAnalysisFeign(accessionNumber);
+            return dicomService.dicomAnalysisFeign(accessionNumber);
         }
 
         return ResponseResult.success();
@@ -140,7 +140,15 @@ public class CTModuleController {
     }
 
     /**
-     * 大模型分析后回调接口
+     * 大模型分析接口
+     */
+    @GetMapping("/dicom/analysis")
+    public ResponseResult<String> dicomAnalysis(@RequestParam String accessionNumber) {
+        return dicomService.dicomAnalysisFeign(accessionNumber);
+    }
+
+    /**
+     * 大模型分析回调接口
      */
     @GetMapping("/dicom/analysis/callback")
     public ResponseResult<String> dicomAnalysisCallback(@RequestParam Integer isSuccess, @RequestParam String accessionNumber) {

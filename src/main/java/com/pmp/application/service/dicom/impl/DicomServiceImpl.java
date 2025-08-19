@@ -198,11 +198,17 @@ public class DicomServiceImpl implements DicomService {
      * @param accessionNumber
      */
     @Override
-    public void dicomAnalysisFeign(String accessionNumber) {
+    public ResponseResult<String> dicomAnalysisFeign(String accessionNumber) {
         String url = "http://192.168.5.126:8000/ct-module/dicom/analysis";
         // 构造请求体
         Map<String, String> requestBody = Collections.singletonMap("dicomUrl", uploadPath + accessionNumber);
         // 发送POST请求
-        HttpUtil.post(url, requestBody);
+        try {
+            HttpUtil.post(url, requestBody);
+            return ResponseResult.success("请求成功");
+        } catch (Exception e) {
+            log.error("调用大模型分析失败", e);
+            return ResponseResult.error(500, "调用大模型分析失败: " + e.getMessage());
+        }
     }
 }
