@@ -3,22 +3,26 @@ package com.pmp.interfaces.web.vo;
 import lombok.Data;
 
 /**
- * 病人
+ * 患者
  */
 @Data
 public class PatientVO {
     /**
-     * 病人主键ID
+     * 患者主键ID
      */
     private Integer id;
     /**
-     * 病人ID
+     * 患者ID
      */
     private String patientId;
     /**
-     * 病人名称
+     * 患者名称
      */
     private String patientName;
+    /**
+     * 患者性别
+     */
+    private String sex;
     /**
      * 开始时间
      */

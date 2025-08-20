@@ -36,7 +36,7 @@ public class CTModuleController {
     private final DicomService dicomService;
 
     /**
-     * 添加病人CT的标注数据
+     * 添加患者CT的标注数据
      *
      * @param labelDataVO
      * @return
@@ -48,7 +48,7 @@ public class CTModuleController {
     }
 
     /**
-     * 查询病人的标注数据
+     * 查询患者的标注数据
      *
      * @param labelDataVO
      * @return

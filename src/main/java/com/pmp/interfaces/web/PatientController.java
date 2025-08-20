@@ -20,22 +20,21 @@ public class PatientController {
     private final PatientService patientService;
 
     /**
-     * 查询病人列表
+     * 查询患者列表
      *
-     * @param patientVO 病人信息
+     * @param patientVO 患者信息
      * @return
      */
     @PostMapping("/findList")
     public ResponseResult<List<PatientDO>> findList(@RequestBody PatientVO patientVO) {
-        ResponseCode.SUCCESS.getMessage();
         return patientService.findList(patientVO);
 
     }
 
     /**
-     * 查看病人详情
+     * 查看患者详情
      *
-     * @param id 病人主键ID
+     * @param id 患者主键ID
      * @return
      */
     @GetMapping("/detail")

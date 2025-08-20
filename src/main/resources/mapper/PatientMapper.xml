@@ -46,6 +46,9 @@
             <if test="patientName != null and patientName != ''">
                 AND patient_name LIKE CONCAT('%', #{patientName}, '%')
             </if>
+            <if test="sex != null and sex != ''">
+                AND sex = #{sex}
+            </if>
             <if test="dateStart != null and dateStart != ''">
                 AND create_time &gt;= #{dateStart}
             </if>
