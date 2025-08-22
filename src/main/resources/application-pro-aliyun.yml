@@ -16,6 +16,9 @@ spring:
       url: jdbc:mysql://${server.ip}:3306/pmp_ai_analysis?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
       username: admin
       password: Zc@123456
+    multipart:
+      max-file-size: 1000MB
+      max-request-size: 1000MB
 
 # redis相关
 redis.addrs: ${server.ip}:6379
