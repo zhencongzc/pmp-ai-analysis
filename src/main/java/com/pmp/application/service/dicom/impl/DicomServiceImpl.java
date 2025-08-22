@@ -39,6 +39,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
 @Service
@@ -160,7 +161,7 @@ public class DicomServiceImpl implements DicomService {
     public ResponseResult<String> dicomAnalysisCallback(Integer isSuccess, String accessionNumber) {
         log.info("收到回调请求，isSuccess：{}，accessionNumber：{}", isSuccess, accessionNumber);
         if (isSuccess != 1) {
-            return ResponseResult.error(500, "分析失败");
+            return ResponseResult.error(500, "大模型分析失败");
         }
 
         //获取处理后的，将dicom转为png
@@ -170,12 +171,15 @@ public class DicomServiceImpl implements DicomService {
             if (files != null) {
                 for (File file : files) {
                     String dicomPath = file.getAbsolutePath();
+                    if (!dicomPath.endsWith(".dcm")) {
+                        continue;
+                    }
                     String pngPath = dicomPath.replace(".dcm", ".png");
                     try {
                         DicomUtil.convertDicomToPng(dicomPath, pngPath);
                     } catch (Exception e) {
                         e.printStackTrace();
-                        return ResponseResult.error(500, "转换失败");
+                        return ResponseResult.error(500, "dicom文件转png失败");
                     }
                 }
             }
@@ -202,13 +206,15 @@ public class DicomServiceImpl implements DicomService {
         String url = "http://192.168.5.126:8000/ct-module/dicom/analysis";
         // 构造请求体
         Map<String, String> requestBody = Collections.singletonMap("dicomUrl", uploadPath + accessionNumber);
-        // 发送POST请求
-        try {
-            HttpUtil.post(url, requestBody);
-            return ResponseResult.success("请求成功");
-        } catch (Exception e) {
-            log.error("调用大模型分析失败", e);
-            return ResponseResult.error(500, "调用大模型分析失败: " + e.getMessage());
-        }
+
+        // 异步执行HTTP请求
+        CompletableFuture.runAsync(() -> {
+            try {
+                HttpUtil.post(url, requestBody);
+            } catch (Exception e) {
+                log.error("调用大模型分析失败：accessionNumber：{}", accessionNumber);
+            }
+        });
+        return ResponseResult.success("请求成功");
     }
 }
