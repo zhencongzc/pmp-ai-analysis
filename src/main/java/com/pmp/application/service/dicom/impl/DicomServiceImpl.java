@@ -50,6 +50,12 @@ public class DicomServiceImpl implements DicomService {
     @Value("${document.upload.path}")
     private String uploadPath;
 
+    @Value("${ai.model.analysis.path}")
+    private String analysisPath;
+
+    @Value("${ai.model.pci.path}")
+    private String pciPath;
+
     private final LabelDataMapper labelDataMapper;
     private final PatientMapper patientMapper;
     private final DicomMapper dicomMapper;
@@ -193,6 +199,12 @@ public class DicomServiceImpl implements DicomService {
      */
     @Override
     public ResponseResult<String> dicomAnalysisPciCallback(ReportDO reportDO) {
+        //todo 获取患者id、名称
+
+        //todo 添加结论
+
+        //新增分析报告
+        dicomMapper.insertReport(reportDO);
         return ResponseResult.success();
     }
 
@@ -203,18 +215,28 @@ public class DicomServiceImpl implements DicomService {
      */
     @Override
     public ResponseResult<String> dicomAnalysisFeign(String accessionNumber) {
-        String url = "http://192.168.5.126:8000/ct-module/dicom/analysis";
-        // 构造请求体
-        Map<String, String> requestBody = Collections.singletonMap("dicomUrl", uploadPath + accessionNumber);
-
+        //标注大模型
+        Map<String, String> requestBody1 = Collections.singletonMap("dicomUrl", uploadPath + accessionNumber);
         // 异步执行HTTP请求
         CompletableFuture.runAsync(() -> {
             try {
-                HttpUtil.post(url, requestBody);
+                HttpUtil.post(analysisPath, requestBody1);
             } catch (Exception e) {
-                log.error("调用大模型分析失败：accessionNumber：{}", accessionNumber);
+                log.error("调用标注大模型分析失败：accessionNumber：{}", accessionNumber);
             }
         });
+
+        //PCI大模型
+        Map<String, String> requestBody2 = Collections.singletonMap("dcm_path", uploadPath + accessionNumber);
+        // 异步执行HTTP请求
+        CompletableFuture.runAsync(() -> {
+            try {
+                HttpUtil.post(pciPath, requestBody2);
+            } catch (Exception e) {
+                log.error("调用PCI大模型分析失败：accessionNumber：{}", accessionNumber);
+            }
+        });
+
         return ResponseResult.success("请求成功");
     }
 }

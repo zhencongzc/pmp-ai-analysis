@@ -40,5 +40,14 @@ document:
   upload:
     path: /opt/upload/
 
+# 模型地址
+ai:
+  model:
+    analysis:
+      path: http://192.168.5.126:8000/ct-module/dicom/analysis
+    pci:
+      path: http://127.0.0.1:8509/genpci
+#      path: http://192.168.5.126:8509/genpci
+
 # 是否是开发环境
 isDev: true

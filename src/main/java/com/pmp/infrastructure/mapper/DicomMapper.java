@@ -56,4 +56,11 @@ public interface DicomMapper {
      * @return
      */
     ReportDO findReport(String accessionNumber);
+
+    /**
+     * 新增CT分析报告
+     *
+     * @param reportDO
+     */
+    void insertReport(ReportDO reportDO);
 }

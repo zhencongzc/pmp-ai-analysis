@@ -63,7 +63,7 @@ public class CTModuleController {
      *
      * @return
      */
-    @RequiresRoles("admin")
+//    @RequiresRoles("admin")
     @PostMapping(value = "/dicom/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseResult<String> uploadDicomFile(@RequestParam("file") MultipartFile file[]) {
         String accessionNumber = "";
