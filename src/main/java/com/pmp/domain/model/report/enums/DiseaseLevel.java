@@ -111,6 +111,6 @@ public enum DiseaseLevel {
                 return grade;
             }
         }
-        return null;
+        return G1;
     }
 }

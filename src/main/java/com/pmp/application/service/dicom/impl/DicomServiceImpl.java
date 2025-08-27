@@ -157,8 +157,7 @@ public class DicomServiceImpl implements DicomService {
      */
     @Override
     public ReportDO findReport(String accessionNumber) {
-//        return dicomMapper.findReport(accessionNumber);
-        return dicomMapper.findReport("20241225004460");
+        return dicomMapper.findReport(accessionNumber);
     }
 
     /**
