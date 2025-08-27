@@ -11,6 +11,8 @@ import com.pmp.common.pojo.ResponseResult;
 import com.pmp.common.util.DicomUtil;
 import com.pmp.common.util.FileUtil;
 import com.pmp.common.util.StreamUtil;
+import com.pmp.domain.model.report.enums.DiseaseLevel;
+import com.pmp.domain.model.report.enums.DiseaseType;
 import com.pmp.infrastructure.mapper.DicomMapper;
 import com.pmp.infrastructure.mapper.LabelDataMapper;
 import com.pmp.infrastructure.mapper.PatientMapper;
@@ -155,17 +157,17 @@ public class DicomServiceImpl implements DicomService {
      */
     @Override
     public ReportDO findReport(String accessionNumber) {
-        //todo 等待集成
+        //todo 取最新的报告
         return dicomMapper.findReport("20241225004460");
     }
 
     /**
-     * 大模型分析后回调接口
+     * 病灶识别模型分析后回调接口
      * 回传是否成功标记和对应的唯一标识号
      */
     @Override
     public ResponseResult<String> dicomAnalysisCallback(Integer isSuccess, String accessionNumber) {
-        log.info("收到回调请求，isSuccess：{}，accessionNumber：{}", isSuccess, accessionNumber);
+        log.info("收到病灶识别模型回调请求，isSuccess：{}，accessionNumber：{}", isSuccess, accessionNumber);
         if (isSuccess != 1) {
             return ResponseResult.error(500, "大模型分析失败");
         }
@@ -190,50 +192,72 @@ public class DicomServiceImpl implements DicomService {
                 }
             }
         }
+        log.info("图片已转换完成，pngUrl：{}", uploadDir);
         return ResponseResult.success();
     }
 
     /**
-     * 大模型分析（PCI）回调接口
+     * PCI评分模型回调接口
      * 回传分析报告
      */
     @Override
     public ResponseResult<String> dicomAnalysisPciCallback(ReportDO reportDO) {
-        //todo 获取患者id、名称
+        log.info("收到PCI评分模型回调请求，accessionNumber：{}，reportDO：{}", reportDO.getAccessionNumber(), reportDO);
+        // 获取患者id、名称
+        DicomDO dicomDO = dicomMapper.findDicomByAccessionNumber(reportDO.getAccessionNumber());
+        reportDO.setPatientId(dicomDO.getPatientId());
+        reportDO.setPatientName(dicomDO.getPatientName());
 
-        //todo 添加结论
+        // 添加结论
+        StringBuilder conclusion = new StringBuilder();
+        conclusion.append("检测结果为：");
+        if (reportDO.getIsPositive() == 1) {
+            conclusion.append("阳性（阳性概率为").append(reportDO.getPositiveRate()).append("）。");
+        } else {
+            conclusion.append("阴性。");
+        }
+        conclusion.append("病理分级为").append(DiseaseLevel.getByCode(reportDO.getDiseaseLevel()).getName()).append("，");
+        conclusion.append(DiseaseLevel.getByCode(reportDO.getDiseaseLevel()).getDescription());
+        if (reportDO.getMesentericContracture() == 1) {
+            conclusion.append("存在肠系膜挛缩现象。");
+        } else {
+            conclusion.append("不存在肠系膜挛缩现象。");
+        }
+        conclusion.append("可考虑的治疗策略：").append(DiseaseLevel.getByCode(reportDO.getDiseaseLevel()).getTreatmentStrategies());
+        reportDO.setConclusion(conclusion.toString());
 
         //新增分析报告
         dicomMapper.insertReport(reportDO);
+        log.info("分析报告已完成，reportDO：{}", reportDO);
         return ResponseResult.success();
     }
 
     /**
-     * 调用大模型分析dimcom文件
+     * 调用模型分析dimcom文件
      *
      * @param accessionNumber
      */
     @Override
     public ResponseResult<String> dicomAnalysisFeign(String accessionNumber) {
-        //标注大模型
+        //病灶识别模型
         Map<String, String> requestBody1 = Collections.singletonMap("dicomUrl", uploadPath + accessionNumber);
         // 异步执行HTTP请求
         CompletableFuture.runAsync(() -> {
             try {
                 HttpUtil.post(analysisPath, requestBody1);
             } catch (Exception e) {
-                log.error("调用标注大模型分析失败：accessionNumber：{}", accessionNumber);
+                log.error("调用病灶识别模型分析失败：accessionNumber：{}", accessionNumber);
             }
         });
 
-        //PCI大模型
+        //PCI评分模型
         Map<String, String> requestBody2 = Collections.singletonMap("dcm_path", uploadPath + accessionNumber);
         // 异步执行HTTP请求
         CompletableFuture.runAsync(() -> {
             try {
                 HttpUtil.post(pciPath, requestBody2);
             } catch (Exception e) {
-                log.error("调用PCI大模型分析失败：accessionNumber：{}", accessionNumber);
+                log.error("调用PCI评分模型分析失败：accessionNumber：{}", accessionNumber);
             }
         });
 

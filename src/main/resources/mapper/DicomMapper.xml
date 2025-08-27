@@ -214,6 +214,30 @@
         WHERE id=#{id}
     </select>
 
+    <select id="findDicomByAccessionNumber" resultType="com.pmp.domain.model.dicom.DicomDO">
+        SELECT id,
+               sop_instance_uid   AS sopInstanceUid,
+               patient_id         AS patientId,
+               patient_name       AS patientName,
+               accession_number   AS accessionNumber,
+               study_id           AS studyId,
+               series_number      AS seriesNumber,
+               instance_number    AS instanceNumber,
+               series_date        AS seriesDate,
+               series_time        AS seriesTime,
+               study_description  AS studyDescription,
+               modality,
+               series_description AS seriesDescription,
+            rows,
+            columns,
+            dicom_path AS dicomPath,
+            png_path AS pngPath,
+            create_time AS createTime
+        FROM ct_dicom
+        WHERE accession_number=#{accessionNumber}
+            LIMIT 1
+    </select>
+
     <select id="findGroupPictureByAccessionNumber" resultType="java.lang.String">
         SELECT png_path AS pngPath
         FROM ct_dicom
@@ -250,5 +274,6 @@
         FROM ct_report
         WHERE accession_number = #{accessionNumber}
     </select>
+
 
 </mapper>

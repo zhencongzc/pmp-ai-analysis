@@ -13,6 +13,16 @@ public class TestController {
         return "Hello, Spring Boot!";
     }
 
+    @GetMapping("/timeout")
+    public String timeout() {
+        try {
+            Thread.sleep(60000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return "Hello, Spring Boot!";
+    }
+
     public static void main(String[] args) {
 
 

@@ -56,19 +56,19 @@ public interface DicomService {
     ReportDO findReport(String accessionNumber);
 
     /**
-     * 大模型分析回调接口
+     * 病灶识别模型-回调接口
      * 回传是否成功标记和对应的唯一标识号
      */
     ResponseResult<String> dicomAnalysisCallback(Integer isSuccess, String accessionNumber);
 
     /**
-     * 大模型分析（PCI）回调接口
+     * PCI评分模型-回调接口
      * 回传分析报告
      */
     ResponseResult<String> dicomAnalysisPciCallback(ReportDO reportDO);
 
     /**
-     * 调用大模型分析dimcom文件
+     * 调用模型分析dimcom文件
      * @param accessionNumber
      */
     ResponseResult<String> dicomAnalysisFeign(String accessionNumber);

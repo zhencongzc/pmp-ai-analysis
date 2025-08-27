@@ -140,7 +140,7 @@ public class CTModuleController {
     }
 
     /**
-     * 大模型分析接口
+     * 模型分析接口
      */
     @GetMapping("/dicom/analysis")
     public ResponseResult<String> dicomAnalysis(@RequestParam String accessionNumber) {
@@ -148,7 +148,7 @@ public class CTModuleController {
     }
 
     /**
-     * 大模型分析回调接口
+     * 病灶识别模型-回调接口
      */
     @GetMapping("/dicom/analysis/callback")
     public ResponseResult<String> dicomAnalysisCallback(@RequestParam Integer isSuccess, @RequestParam String accessionNumber) {
@@ -157,7 +157,7 @@ public class CTModuleController {
 
 
     /**
-     * 大模型分析（PCI）回调接口
+     * PCI评分模型-回调接口
      */
     @PostMapping("/dicom/analysis-pci/callback")
     public ResponseResult<String> dicomAnalysisPciCallback(@RequestBody ReportDO reportDO) {

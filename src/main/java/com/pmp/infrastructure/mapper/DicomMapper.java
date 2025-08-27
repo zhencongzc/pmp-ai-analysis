@@ -42,6 +42,14 @@ public interface DicomMapper {
     DicomDO findDicomById(DicomVO dicomVO);
 
     /**
+     * 根据医院唯一标识号查询Dicom文件
+     *
+     * @param accessionNumber
+     * @return
+     */
+    DicomDO findDicomByAccessionNumber(String accessionNumber);
+
+    /**
      * 根据医院唯一标识号查询整组图片
      *
      * @param accessionNumber
@@ -63,4 +71,6 @@ public interface DicomMapper {
      * @param reportDO
      */
     void insertReport(ReportDO reportDO);
+
+
 }
