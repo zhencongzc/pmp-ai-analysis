@@ -273,6 +273,7 @@
                create_time            AS createTime
         FROM ct_report
         WHERE accession_number = #{accessionNumber}
+        ORDER BY createTime DESC LIMIT 1
     </select>
 
 

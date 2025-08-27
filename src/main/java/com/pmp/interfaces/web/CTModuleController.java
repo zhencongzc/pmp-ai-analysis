@@ -114,7 +114,7 @@ public class CTModuleController {
      * @param accessionNumber 医院唯一标识号
      * @return
      */
-    @RequiresRoles({"admin", "user"})
+//    @RequiresRoles({"admin", "user"})
     @GetMapping("/dicom/findGroupPicture")
     public ResponseResult<List<String>> findGroupPicture(@RequestParam String accessionNumber) {
         List<String> groupData = dicomService.findGroupPicture(accessionNumber);
@@ -127,7 +127,7 @@ public class CTModuleController {
      * @param accessionNumber 医院唯一标识号
      * @return
      */
-    @RequiresRoles({"admin", "user"})
+//    @RequiresRoles({"admin", "user"})
     @GetMapping("/dicom/findReport")
     public ResponseResult<ReportVO> findReport(@RequestParam String accessionNumber) {
         // 获取DO对象
