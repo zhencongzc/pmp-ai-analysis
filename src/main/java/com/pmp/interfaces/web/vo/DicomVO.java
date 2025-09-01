@@ -14,11 +14,11 @@ public class DicomVO {
      */
     private Integer id;
     /**
-     * 病人ID
+     * 患者ID
      */
     private String patientId;
     /**
-     * 病人名称
+     * 患者名称
      */
     private String patientName;
     /**

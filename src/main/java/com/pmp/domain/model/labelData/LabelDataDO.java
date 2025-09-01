@@ -3,7 +3,7 @@ package com.pmp.domain.model.labelData;
 import lombok.Data;
 
 /**
- * 病人CT的标注数据
+ * 患者CT的标注数据
  */
 @Data
 public class LabelDataDO {
@@ -16,7 +16,7 @@ public class LabelDataDO {
      */
     private String computerName;
     /**
-     * 病人ID
+     * 患者ID
      */
     private String patientId;
     /**

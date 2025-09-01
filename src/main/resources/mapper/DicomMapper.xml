@@ -190,6 +190,23 @@
         ORDER BY create_time DESC
     </select>
 
+    <select id="findDicomGroupByAccessionNumber" resultType="com.pmp.domain.model.dicom.DicomGroupDTO">
+        SELECT MAX(patient_id)         AS patientId,
+               MAX(patient_name)       AS patientName,
+               accession_number        AS accessionNumber,
+               MAX(study_id)           AS studyId,
+               MAX(series_number)      AS seriesNumber,
+               COUNT(*)                AS instanceCount,
+               MAX(series_date)        AS seriesDate,
+               MAX(series_time)        AS seriesTime,
+               MAX(study_description)  AS studyDescription,
+               MAX(modality)           AS modality,
+               MAX(series_description) AS seriesDescription
+        FROM ct_dicom
+        WHERE accession_number = #{accessionNumber}
+        GROUP BY accession_number
+    </select>
+
     <select id="findDicomById" parameterType="com.pmp.interfaces.web.vo.DicomVO"
             resultType="com.pmp.domain.model.dicom.DicomDO">
         SELECT id,

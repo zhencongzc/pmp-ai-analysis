@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.pixelmed.dicom.DicomException;
 import com.pmp.common.util.HttpUtil;
 import com.pmp.domain.model.dicom.DicomDO;
+import com.pmp.domain.model.dicom.DicomGroupDTO;
 import com.pmp.domain.model.patient.PatientDO;
 import com.pmp.domain.model.report.ReportDO;
 import com.pmp.common.pojo.ResponseResult;
@@ -63,7 +64,7 @@ public class DicomServiceImpl implements DicomService {
     private final DicomMapper dicomMapper;
 
     /**
-     * 保存病人的dicom文件
+     * 保存患者的dicom文件
      *
      * @param file
      */
@@ -76,13 +77,13 @@ public class DicomServiceImpl implements DicomService {
         DicomInputStream dis = new DicomInputStream(new ByteArrayInputStream(data));
         Attributes attributes = dis.readDataset();
 
-        //封装病人信息
+        //封装患者信息
         PatientDO patientDO = new PatientDO();
         patientDO.setPatientId(attributes.getString(Tag.PatientID));
         patientDO.setPatientName(attributes.getString(Tag.PatientName));
 //            patientDO.setSex(attributes.getString(Tag.PatientSex));//性别有乱码，后续优化
         patientDO.setBirthDay(attributes.getString(Tag.PatientBirthDate));
-        //查询是否录入过当前病人信息，如果没有就新增数据
+        //查询是否录入过当前患者信息，如果没有就新增数据
         PatientDO existPatient = patientMapper.selectPatientByPatientId(patientDO);
         if (existPatient == null) {
             patientMapper.insertPatient(patientDO);
@@ -136,6 +137,17 @@ public class DicomServiceImpl implements DicomService {
         DicomVO dicomVO = new DicomVO();
         dicomVO.setId(id);
         return dicomMapper.findDicomById(dicomVO);
+    }
+
+    /**
+     * 根据医院唯一标识号查询dicom组详情
+     *
+     * @param accessionNumber 医院唯一标识号
+     * @return
+     */
+    @Override
+    public DicomGroupDTO findDicomDetailByAccessionNumber(String accessionNumber) {
+        return dicomMapper.findDicomGroupByAccessionNumber(accessionNumber);
     }
 
     /**

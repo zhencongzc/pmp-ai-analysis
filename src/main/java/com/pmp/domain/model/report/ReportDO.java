@@ -13,12 +13,12 @@ public class ReportDO {
     private Integer id;
 
     /**
-     * 病人ID
+     * 患者ID
      */
     private String patientId;
 
     /**
-     * 病人姓名
+     * 患者姓名
      */
     private String patientName;
 

@@ -1,9 +1,8 @@
 package com.pmp.interfaces.web;
 
-import com.alibaba.fastjson.JSONObject;
 import com.pixelmed.dicom.DicomException;
-import com.pmp.domain.model.auth.RequiresRoles;
 import com.pmp.domain.model.dicom.DicomDO;
+import com.pmp.domain.model.dicom.DicomGroupDTO;
 import com.pmp.domain.model.report.ReportDO;
 import com.pmp.common.pojo.ResponseCode;
 import com.pmp.common.pojo.ResponseResult;
@@ -96,15 +95,27 @@ public class CTModuleController {
         return dicomService.findDicom(dicomVO);
     }
 
+//    /**
+//     * 查看dicom详情
+//     *
+//     * @param id dicom文件主键
+//     * @return
+//     */
+//    @GetMapping("/dicom/detail")
+//    public ResponseResult<DicomDO> findDicomDetail(@RequestParam Integer id) {
+//        DicomDO res = dicomService.findDicomDetail(id);
+//        return ResponseResult.success(res);
+//    }
+
     /**
-     * 查看dicom详情
+     * 查看dicom组详情
      *
-     * @param id dicom文件主键
+     * @param accessionNumber 医院唯一标识号
      * @return
      */
     @GetMapping("/dicom/detail")
-    public ResponseResult<DicomDO> findDicomDetail(@RequestParam Integer id) {
-        DicomDO res = dicomService.findDicomDetail(id);
+    public ResponseResult<DicomGroupDTO> findDicomDetail(@RequestParam String accessionNumber) {
+        DicomGroupDTO res = dicomService.findDicomDetailByAccessionNumber(accessionNumber);
         return ResponseResult.success(res);
     }
 

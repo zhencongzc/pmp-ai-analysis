@@ -3,7 +3,7 @@ package com.pmp.domain.model.patient;
 import lombok.Data;
 
 /**
- * 病人个人信息
+ * 患者个人信息
  */
 @Data
 public class PatientDO {
@@ -12,7 +12,7 @@ public class PatientDO {
      */
     private Integer id;
     /**
-     * 病人ID
+     * 患者ID
      */
     private String patientId;
     /**

@@ -22,7 +22,7 @@ public class PatientServiceImpl implements PatientService {
     private final PatientMapper patientMapper;
 
     /**
-     * 查询病人列表
+     * 查询患者列表
      *
      * @param patientVO
      * @return
@@ -35,7 +35,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     /**
-     * 查询病人详情
+     * 查询患者详情
      *
      * @param id
      * @return

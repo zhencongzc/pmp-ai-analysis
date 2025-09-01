@@ -1,6 +1,7 @@
 package com.pmp.infrastructure.mapper;
 
 import com.pmp.domain.model.dicom.DicomDO;
+import com.pmp.domain.model.dicom.DicomGroupDTO;
 import com.pmp.domain.model.report.ReportDO;
 import com.pmp.interfaces.web.vo.DicomVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -73,4 +74,11 @@ public interface DicomMapper {
     void insertReport(ReportDO reportDO);
 
 
+    /**
+     * 根据医院唯一标识号查询Dicom组信息
+     *
+     * @param accessionNumber
+     * @return
+     */
+    DicomGroupDTO findDicomGroupByAccessionNumber(String accessionNumber);
 }

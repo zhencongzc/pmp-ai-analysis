@@ -12,14 +12,14 @@ import java.util.List;
 public interface LabelDataService {
 
     /**
-     * 新增病人CT的标注数据
+     * 新增患者CT的标注数据
      *
      * @param labelDataVO
      */
     void addLabelData(LabelDataVO labelDataVO);
 
     /**
-     * 查询病人CT的标注数据
+     * 查询患者CT的标注数据
      *
      * @param labelDataVO
      * @return

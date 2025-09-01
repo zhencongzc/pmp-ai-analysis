@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * 病患管理
+ * 患者管理
  */
 @RestController
 @RequiredArgsConstructor

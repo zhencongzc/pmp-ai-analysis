@@ -22,8 +22,8 @@ DROP TABLE IF EXISTS `ct_dicom`;
 CREATE TABLE `ct_dicom` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `sop_instance_uid` varchar(255) DEFAULT NULL COMMENT '全球唯一标识符',
-  `patient_id` varchar(100) DEFAULT NULL COMMENT '病人ID',
-  `patient_name` varchar(255) DEFAULT NULL COMMENT '病人姓名',
+  `patient_id` varchar(100) DEFAULT NULL COMMENT '患者ID',
+  `patient_name` varchar(255) DEFAULT NULL COMMENT '患者姓名',
   `accession_number` varchar(255) DEFAULT NULL COMMENT '医院唯一标识号（一组CT）',
   `study_id` varchar(255) DEFAULT NULL COMMENT '研究编号',
   `series_number` varchar(255) DEFAULT NULL COMMENT '系列编号',
@@ -68,8 +68,8 @@ CREATE TABLE `ct_label_data` (
 DROP TABLE IF EXISTS `ct_report`;
 CREATE TABLE `ct_report` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `patient_id` varchar(100) DEFAULT NULL COMMENT '病人ID',
-  `patient_name` varchar(255) DEFAULT NULL COMMENT '病人姓名',
+  `patient_id` varchar(100) DEFAULT NULL COMMENT '患者ID',
+  `patient_name` varchar(255) DEFAULT NULL COMMENT '患者姓名',
   `accession_number` varchar(255) DEFAULT NULL COMMENT '医院唯一标识号（一组CT）',
   `is_positive` int(2) DEFAULT NULL COMMENT '是否阳性',
   `positive_rate` double DEFAULT NULL COMMENT '阳性概率',
@@ -107,7 +107,7 @@ INSERT INTO `ct_report` VALUES ('1', '20241225004460', 'ZHANG WAN XIN', '2024122
 DROP TABLE IF EXISTS `patient`;
 CREATE TABLE `patient` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `patient_id` varchar(100) DEFAULT NULL COMMENT '病人ID',
+  `patient_id` varchar(100) DEFAULT NULL COMMENT '患者ID',
   `patient_name` varchar(100) DEFAULT NULL COMMENT '姓名',
   `sex` varchar(10) DEFAULT NULL COMMENT '性别 M-男，F-女',
   `birth_day` date DEFAULT NULL COMMENT '出生日期',

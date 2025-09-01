@@ -10,14 +10,14 @@ import java.util.List;
 public interface LabelDataMapper {
 
     /**
-     * 新增病人CT的标注数据
+     * 新增患者CT的标注数据
      *
      * @param labelDataDO
      */
     void insertLabelData(LabelDataDO labelDataDO);
 
     /**
-     * 根据条件查询病人CT的标注数据
+     * 根据条件查询患者CT的标注数据
      *
      * @param labelDataVO
      * @return

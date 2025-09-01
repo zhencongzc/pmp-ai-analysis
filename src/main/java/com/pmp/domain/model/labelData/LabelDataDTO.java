@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 
 /**
- * 病人CT的标注数据
+ * 患者CT的标注数据
  */
 @Data
 public class LabelDataDTO {
@@ -18,7 +18,7 @@ public class LabelDataDTO {
      */
     private String computerName;
     /**
-     * 病人ID
+     * 患者ID
      */
     private String patientId;
     /**

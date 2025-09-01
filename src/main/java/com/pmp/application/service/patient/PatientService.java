@@ -8,19 +8,19 @@ import com.pmp.interfaces.web.vo.PatientVO;
 import java.util.List;
 
 /**
- * 病患管理
+ * 患者管理
  */
 public interface PatientService {
 
     /**
-     * 查询病人列表
+     * 查询患者列表
      * @param patientVO
      * @return
      */
     ResponseResult<List<PatientDO>> findList(PatientVO patientVO);
 
     /**
-     * 查询病人详情
+     * 查询患者详情
      * @param id
      * @return
      */

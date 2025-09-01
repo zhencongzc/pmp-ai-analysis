@@ -25,7 +25,7 @@ public class LabelDataServiceImpl implements LabelDataService {
     private final LabelDataMapper labelDataMapper;
 
     /**
-     * 新增病人CT的标注数据
+     * 新增患者CT的标注数据
      *
      * @param labelDataVO
      */
@@ -39,7 +39,7 @@ public class LabelDataServiceImpl implements LabelDataService {
     }
 
     /**
-     * 查询病人CT的标注数据
+     * 查询患者CT的标注数据
      *
      * @param labelDataVO
      * @return

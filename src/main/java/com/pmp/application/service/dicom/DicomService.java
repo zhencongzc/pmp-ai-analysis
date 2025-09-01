@@ -2,6 +2,7 @@ package com.pmp.application.service.dicom;
 
 import com.pixelmed.dicom.DicomException;
 import com.pmp.domain.model.dicom.DicomDO;
+import com.pmp.domain.model.dicom.DicomGroupDTO;
 import com.pmp.domain.model.report.ReportDO;
 import com.pmp.common.pojo.ResponseResult;
 import com.pmp.interfaces.web.vo.DicomVO;
@@ -17,7 +18,7 @@ import java.util.List;
 public interface DicomService {
 
     /**
-     * 保存病人的dicom文件
+     * 保存患者的dicom文件
      *
      * @param file
      */
@@ -38,6 +39,14 @@ public interface DicomService {
      * @return
      */
     DicomDO findDicomDetail(Integer id);
+
+    /**
+     * 根据医院唯一标识号查询dicom组详情
+     *
+     * @param accessionNumber 医院唯一标识号
+     * @return
+     */
+    DicomGroupDTO findDicomDetailByAccessionNumber(String accessionNumber);
 
     /**
      * 根据医院唯一标识号查询整组图片
@@ -69,7 +78,9 @@ public interface DicomService {
 
     /**
      * 调用模型分析dimcom文件
+     *
      * @param accessionNumber
      */
     ResponseResult<String> dicomAnalysisFeign(String accessionNumber);
+
 }

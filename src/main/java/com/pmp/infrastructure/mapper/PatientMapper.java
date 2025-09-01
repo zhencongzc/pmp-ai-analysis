@@ -10,14 +10,14 @@ import java.util.List;
 public interface PatientMapper {
 
     /**
-     * 新增病人个人信息
+     * 新增患者个人信息
      *
      * @param patientDO
      */
     void insertPatient(PatientDO patientDO);
 
     /**
-     * 根据病人主键ID查询病人个人信息
+     * 根据患者主键ID查询患者个人信息
      *
      * @param id
      * @return
@@ -25,7 +25,7 @@ public interface PatientMapper {
     PatientDO selectPatientById(Integer id);
 
     /**
-     * 根据病人ID查询病人个人信息
+     * 根据患者ID查询患者个人信息
      *
      * @param patientDO
      * @return
@@ -33,7 +33,7 @@ public interface PatientMapper {
     PatientDO selectPatientByPatientId(PatientDO patientDO);
 
     /**
-     * 根据条件查询病人列表
+     * 根据条件查询患者列表
      *
      * @param patientVO
      * @return

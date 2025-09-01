@@ -7,13 +7,13 @@ import lombok.Data;
  * 按照accessionNumber划分组
  */
 @Data
-public class DicomGroupDO {
+public class DicomGroupDTO {
     /**
-     * 病人ID
+     * 患者ID
      */
     private String patientId;
     /**
-     * 病人姓名
+     * 患者姓名
      */
     private String patientName;
     /**
@@ -31,10 +31,9 @@ public class DicomGroupDO {
      */
     private String seriesNumber;
     /**
-     * 实例编号
-     * 由所有切片文件的编号拼接而成
+     * 实例数
      */
-    private String instanceNumbers;
+    private Integer instanceCount;
     /**
      * CT扫描日期
      */
@@ -56,12 +55,4 @@ public class DicomGroupDO {
      * 系列描述
      */
     private String seriesDescription;
-    /**
-     * dicom文件地址
-     */
-    private String dicomPath;
-    /**
-     * 图片文件地址
-     */
-    private String pngPath;
 }
