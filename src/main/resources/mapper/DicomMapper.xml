@@ -161,7 +161,9 @@
         MAX(series_time) AS seriesTime,
         MAX(study_description) AS studyDescription,
         MAX(modality) AS modality,
-        MAX(series_description) AS seriesDescription
+        MAX(status) AS status,
+        MAX(series_description) AS seriesDescription,
+        MAX(create_time) AS createTime
         FROM ct_dicom
         <where>
             <if test="patientId != null and patientId != ''">
@@ -192,6 +194,7 @@
                MAX(series_time)        AS seriesTime,
                MAX(study_description)  AS studyDescription,
                MAX(modality)           AS modality,
+               MAX(status)             AS status,
                MAX(series_description) AS seriesDescription
         FROM ct_dicom
         WHERE accession_number = #{accessionNumber}

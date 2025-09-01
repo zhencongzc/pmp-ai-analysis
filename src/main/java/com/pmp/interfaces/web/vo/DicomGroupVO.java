@@ -1,20 +1,13 @@
-package com.pmp.domain.model.dicom;
+package com.pmp.interfaces.web.vo;
 
 import lombok.Data;
 
 /**
- * CT的dicom文件
+ * CT的dicom文件组
+ * 按照accessionNumber划分组
  */
 @Data
-public class DicomDO {
-    /**
-     * 主键
-     */
-    private Integer id;
-    /**
-     * 全球唯一标识符
-     */
-    private String sopInstanceUid;
+public class DicomGroupVO {
     /**
      * 患者ID
      */
@@ -38,10 +31,9 @@ public class DicomDO {
      */
     private String seriesNumber;
     /**
-     * 实例编号
-     * 代表了当前dicom文件在整组内的序号
+     * 图像数
      */
-    private String instanceNumber;
+    private Integer instanceCount;
     /**
      * 检查日期
      */
@@ -60,25 +52,14 @@ public class DicomDO {
      */
     private String modality;
     /**
+     * 状态
+     * 0-未处理、1-分析完成、2-处理中、3-处理失败
+     */
+    private String status;
+    /**
      * 系列描述
      */
     private String seriesDescription;
-    /**
-     * 行数
-     */
-    private String rows;
-    /**
-     * 列数
-     */
-    private String columns;
-    /**
-     * dicom文件地址
-     */
-    private String dicomPath;
-    /**
-     * 图片文件地址
-     */
-    private String pngPath;
     /**
      * 创建时间
      */

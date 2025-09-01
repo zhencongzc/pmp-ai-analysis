@@ -7,7 +7,9 @@ import com.pmp.domain.model.report.ReportDO;
 import com.pmp.common.pojo.ResponseCode;
 import com.pmp.common.pojo.ResponseResult;
 import com.pmp.domain.model.labelData.LabelDataDTO;
+import com.pmp.interfaces.web.assembler.DicomConverter;
 import com.pmp.interfaces.web.assembler.ReportConverter;
+import com.pmp.interfaces.web.vo.DicomGroupVO;
 import com.pmp.interfaces.web.vo.DicomVO;
 import com.pmp.interfaces.web.vo.LabelDataVO;
 import com.pmp.application.service.dicom.DicomService;
@@ -21,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * CT管理模块
@@ -102,8 +105,15 @@ public class CTModuleController {
      * @return
      */
     @PostMapping("/dicom/findDicomGroup")
-    public ResponseResult<List<DicomGroupDTO>> findDicomGroup(@RequestBody DicomVO dicomVO) {
-        return dicomService.findDicomGroup(dicomVO);
+    public ResponseResult<List<DicomGroupVO>> findDicomGroup(@RequestBody DicomVO dicomVO) {
+        ResponseResult<List<DicomGroupDTO>> result = dicomService.findDicomGroup(dicomVO);
+        if (result.getData() != null) {
+            List<DicomGroupVO> voList = result.getData().stream()
+                    .map(DicomConverter::toVO)
+                    .collect(Collectors.toList());
+            return ResponseResult.success(voList);
+        }
+        return ResponseResult.success();
     }
 
     /**
@@ -125,9 +135,10 @@ public class CTModuleController {
      * @return
      */
     @GetMapping("/dicom/groupDetail")
-    public ResponseResult<DicomGroupDTO> findDicomDetail(@RequestParam String accessionNumber) {
+    public ResponseResult<DicomGroupVO> findDicomDetail(@RequestParam String accessionNumber) {
         DicomGroupDTO res = dicomService.findDicomDetailByAccessionNumber(accessionNumber);
-        return ResponseResult.success(res);
+        DicomGroupVO resVO = DicomConverter.toVO(res);
+        return ResponseResult.success(resVO);
     }
 
     /**

@@ -31,15 +31,15 @@ public class DicomGroupDTO {
      */
     private String seriesNumber;
     /**
-     * 实例数
+     * 图像数
      */
     private Integer instanceCount;
     /**
-     * CT扫描日期
+     * 检查日期
      */
     private String seriesDate;
     /**
-     * CT扫描时间
+     * 扫描时间
      */
     private String seriesTime;
     /**
@@ -47,12 +47,21 @@ public class DicomGroupDTO {
      */
     private String studyDescription;
     /**
-     * 成像模态
+     * 设备类型
      * 例如：CT、MR、DX等
      */
     private String modality;
     /**
+     * 状态
+     * 0-未处理、1-分析完成、2-处理中、3-处理失败
+     */
+    private Integer status;
+    /**
      * 系列描述
      */
     private String seriesDescription;
+    /**
+     * 创建时间
+     */
+    private String createTime;
 }
