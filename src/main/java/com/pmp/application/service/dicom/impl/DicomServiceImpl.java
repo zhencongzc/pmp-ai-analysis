@@ -13,7 +13,6 @@ import com.pmp.common.util.DicomUtil;
 import com.pmp.common.util.FileUtil;
 import com.pmp.common.util.StreamUtil;
 import com.pmp.domain.model.report.enums.DiseaseLevel;
-import com.pmp.domain.model.report.enums.DiseaseType;
 import com.pmp.infrastructure.mapper.DicomMapper;
 import com.pmp.infrastructure.mapper.LabelDataMapper;
 import com.pmp.infrastructure.mapper.PatientMapper;
@@ -25,13 +24,8 @@ import org.dcm4che3.data.Attributes;
 import org.dcm4che3.data.Tag;
 import org.dcm4che3.io.DicomInputStream;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
@@ -43,7 +37,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
-import java.util.logging.Logger;
 
 @Service
 @Slf4j
@@ -114,7 +107,6 @@ public class DicomServiceImpl implements DicomService {
 
     /**
      * 查询dicom列表
-     * 以accessionNumber为纬度做分组展示
      *
      * @param dicomVO
      * @return
@@ -123,6 +115,20 @@ public class DicomServiceImpl implements DicomService {
     public ResponseResult<List<DicomDO>> findDicom(DicomVO dicomVO) {
         Page<Object> page = PageHelper.startPage(dicomVO.getPage(), dicomVO.getPageRow(), true);
         List<DicomDO> list = dicomMapper.findDicomByCondition(dicomVO);
+        return ResponseResult.success(list, page.getTotal());
+    }
+
+    /**
+     * 查询dicom组列表
+     * 以accessionNumber为纬度做分组展示
+     *
+     * @param dicomVO
+     * @return
+     */
+    @Override
+    public ResponseResult<List<DicomGroupDTO>> findDicomGroup(DicomVO dicomVO) {
+        Page<Object> page = PageHelper.startPage(dicomVO.getPage(), dicomVO.getPageRow(), true);
+        List<DicomGroupDTO> list = dicomMapper.findDicomGroupByCondition(dicomVO);
         return ResponseResult.success(list, page.getTotal());
     }
 

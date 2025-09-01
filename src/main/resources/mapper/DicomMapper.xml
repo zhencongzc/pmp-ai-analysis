@@ -149,30 +149,20 @@
     </select>
 
     <select id="findDicomGroupByCondition" parameterType="com.pmp.interfaces.web.vo.DicomVO"
-            resultMap="dicomResultMap">
+            resultType="com.pmp.domain.model.dicom.DicomGroupDTO">
         SELECT
-        MIN(id) AS id,
-        MAX(sop_instance_uid) AS sopInstanceUid,
         MAX(patient_id) AS patientId,
         MAX(patient_name) AS patientName,
         accession_number AS accessionNumber,
         MAX(study_id) AS studyId,
         MAX(series_number) AS seriesNumber,
-        MAX(instance_number) AS instanceNumber,
+        COUNT(*) AS instanceCount,
         MAX(series_date) AS seriesDate,
         MAX(series_time) AS seriesTime,
         MAX(study_description) AS studyDescription,
         MAX(modality) AS modality,
-        MAX(series_description) AS seriesDescription,
-        MAX(rows) AS rows,
-        MAX(columns) AS columns,
-        MAX(dicom_path) AS dicomPath,
-        MAX(png_path) AS pngPath,
-        MAX(create_time) AS createTime,
-        GROUP_CONCAT(instance_number ORDER BY instance_number ASC SEPARATOR ',') AS instanceNumbers,
-        COUNT(*) AS count
+        MAX(series_description) AS seriesDescription
         FROM ct_dicom
-        GROUP BY accession_number
         <where>
             <if test="patientId != null and patientId != ''">
                 AND patient_id LIKE CONCAT('%', #{patientId}, '%')
@@ -187,7 +177,8 @@
                 AND create_time &lt;= #{dateEnd}
             </if>
         </where>
-        ORDER BY create_time DESC
+        GROUP BY accession_number
+        ORDER BY MAX(create_time) DESC
     </select>
 
     <select id="findDicomGroupByAccessionNumber" resultType="com.pmp.domain.model.dicom.DicomGroupDTO">

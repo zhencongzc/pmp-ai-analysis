@@ -33,6 +33,14 @@ public interface DicomService {
     ResponseResult<List<DicomDO>> findDicom(DicomVO dicomVO);
 
     /**
+     * 查询dicom组列表
+     *
+     * @param dicomVO
+     * @return
+     */
+    ResponseResult<List<DicomGroupDTO>> findDicomGroup(DicomVO dicomVO);
+
+    /**
      * 查看dicom详情
      *
      * @param id

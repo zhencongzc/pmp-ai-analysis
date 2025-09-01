@@ -73,7 +73,6 @@ public interface DicomMapper {
      */
     void insertReport(ReportDO reportDO);
 
-
     /**
      * 根据医院唯一标识号查询Dicom组信息
      *
@@ -81,4 +80,12 @@ public interface DicomMapper {
      * @return
      */
     DicomGroupDTO findDicomGroupByAccessionNumber(String accessionNumber);
+
+    /**
+     * 根据条件查询Dicom组信息
+     *
+     * @param dicomVO
+     * @return
+     */
+    List<DicomGroupDTO> findDicomGroupByCondition(DicomVO dicomVO);
 }

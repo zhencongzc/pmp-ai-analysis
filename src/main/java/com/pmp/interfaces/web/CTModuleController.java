@@ -95,17 +95,28 @@ public class CTModuleController {
         return dicomService.findDicom(dicomVO);
     }
 
-//    /**
-//     * 查看dicom详情
-//     *
-//     * @param id dicom文件主键
-//     * @return
-//     */
-//    @GetMapping("/dicom/detail")
-//    public ResponseResult<DicomDO> findDicomDetail(@RequestParam Integer id) {
-//        DicomDO res = dicomService.findDicomDetail(id);
-//        return ResponseResult.success(res);
-//    }
+    /**
+     * 查询dicom组列表
+     *
+     * @param dicomVO
+     * @return
+     */
+    @PostMapping("/dicom/findDicomGroup")
+    public ResponseResult<List<DicomGroupDTO>> findDicomGroup(@RequestBody DicomVO dicomVO) {
+        return dicomService.findDicomGroup(dicomVO);
+    }
+
+    /**
+     * 查看dicom详情
+     *
+     * @param id dicom文件主键
+     * @return
+     */
+    @GetMapping("/dicom/detail")
+    public ResponseResult<DicomDO> findDicomDetail(@RequestParam Integer id) {
+        DicomDO res = dicomService.findDicomDetail(id);
+        return ResponseResult.success(res);
+    }
 
     /**
      * 查看dicom组详情
@@ -113,7 +124,7 @@ public class CTModuleController {
      * @param accessionNumber 医院唯一标识号
      * @return
      */
-    @GetMapping("/dicom/detail")
+    @GetMapping("/dicom/groupDetail")
     public ResponseResult<DicomGroupDTO> findDicomDetail(@RequestParam String accessionNumber) {
         DicomGroupDTO res = dicomService.findDicomDetailByAccessionNumber(accessionNumber);
         return ResponseResult.success(res);
