@@ -240,7 +240,7 @@ public class DicomServiceImpl implements DicomService {
         } else {
             conclusion.append("不存在肠系膜挛缩现象。");
         }
-        conclusion.append("可考虑的治疗策略：").append(DiseaseLevel.getByCode(reportDO.getDiseaseLevel()).getTreatmentStrategies());
+//        conclusion.append("可考虑的治疗策略：").append(DiseaseLevel.getByCode(reportDO.getDiseaseLevel()).getTreatmentStrategies());
         reportDO.setConclusion(conclusion.toString());
 
         //新增分析报告

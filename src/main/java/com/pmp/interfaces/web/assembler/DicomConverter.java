@@ -27,10 +27,15 @@ public class DicomConverter {
         dicomGroupVO.setPatientId(dicomGroupDTO.getPatientId());
         dicomGroupVO.setPatientName(dicomGroupDTO.getPatientName());
         dicomGroupVO.setStudyId(dicomGroupDTO.getStudyId());
+        dicomGroupVO.setSeriesNumber(dicomGroupDTO.getSeriesNumber());
         dicomGroupVO.setAccessionNumber(dicomGroupDTO.getAccessionNumber());
         dicomGroupVO.setInstanceCount(dicomGroupDTO.getInstanceCount());
         dicomGroupVO.setSeriesDate(dicomGroupDTO.getSeriesDate());
+        dicomGroupVO.setSeriesTime(dicomGroupDTO.getSeriesTime());
+        dicomGroupVO.setSeriesDescription(dicomGroupDTO.getSeriesDescription());
+        dicomGroupVO.setStudyDescription(dicomGroupDTO.getStudyDescription());
         dicomGroupVO.setModality(dicomGroupDTO.getModality());
+        dicomGroupVO.setCreateTime(dicomGroupDTO.getCreateTime());
         // 使用枚举转换状态
         if (dicomGroupDTO.getStatus() != null) {
             DicomStatus status = DicomStatus.getByCode(dicomGroupDTO.getStatus());

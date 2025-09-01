@@ -195,7 +195,8 @@
                MAX(study_description)  AS studyDescription,
                MAX(modality)           AS modality,
                MAX(status)             AS status,
-               MAX(series_description) AS seriesDescription
+               MAX(series_description) AS seriesDescription,
+               MAX(create_time)        AS createTime
         FROM ct_dicom
         WHERE accession_number = #{accessionNumber}
         GROUP BY accession_number
