@@ -5,9 +5,9 @@ package com.pmp.domain.model.dicom.enums;
  */
 public enum DicomStatus {
     PENDING(0, "待处理"),
-    PROCESSING(1, "处理中"),
-    SUCCESS(2, "成功"),
-    FAILED(3, "失败");
+    PROCESSING(1, "分析中"),
+    SUCCESS(2, "分析成功"),
+    FAILED(3, "分析失败");
 
     private final Integer code;
     private final String description;

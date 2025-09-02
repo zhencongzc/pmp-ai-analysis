@@ -5,6 +5,7 @@ import com.pmp.domain.model.dicom.DicomGroupDTO;
 import com.pmp.domain.model.report.ReportDO;
 import com.pmp.interfaces.web.vo.DicomVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -88,4 +89,12 @@ public interface DicomMapper {
      * @return
      */
     List<DicomGroupDTO> findDicomGroupByCondition(DicomVO dicomVO);
+
+    /**
+     * 更新Dicom组信息
+     *
+     * @param status
+     * @param accessionNumber
+     */
+    void updateDicomGroupStatus(@Param("status") Integer status, @Param("accessionNumber") String accessionNumber);
 }

@@ -6,6 +6,7 @@ import com.pixelmed.dicom.DicomException;
 import com.pmp.common.util.HttpUtil;
 import com.pmp.domain.model.dicom.DicomDO;
 import com.pmp.domain.model.dicom.DicomGroupDTO;
+import com.pmp.domain.model.dicom.enums.DicomStatus;
 import com.pmp.domain.model.patient.PatientDO;
 import com.pmp.domain.model.report.ReportDO;
 import com.pmp.common.pojo.ResponseResult;
@@ -99,6 +100,7 @@ public class DicomServiceImpl implements DicomService {
         String pngPath = uploadPath + accessionNumber + "/result/sc_dicom/" + accessionNumber + "_" + FileUtil.getFileName(file, false) + "_sc.png";
         dicomDO.setDicomPath(dicomPathNew);
         dicomDO.setPngPath(pngPath);
+        dicomDO.setStatus(DicomStatus.PENDING.getCode());
 
         //新增dicom数据
         dicomMapper.insertDicom(dicomDO);
@@ -186,6 +188,7 @@ public class DicomServiceImpl implements DicomService {
     public ResponseResult<String> dicomAnalysisCallback(Integer isSuccess, String accessionNumber) {
         log.info("收到病灶识别模型回调请求，isSuccess：{}，accessionNumber：{}", isSuccess, accessionNumber);
         if (isSuccess != 1) {
+            dicomMapper.updateDicomGroupStatus(DicomStatus.FAILED.getCode(), accessionNumber);
             return ResponseResult.error(500, "大模型分析失败");
         }
 
@@ -210,6 +213,7 @@ public class DicomServiceImpl implements DicomService {
             }
         }
         log.info("图片已转换完成，pngUrl：{}", uploadDir);
+        dicomMapper.updateDicomGroupStatus(DicomStatus.SUCCESS.getCode(), accessionNumber);
         return ResponseResult.success();
     }
 
@@ -264,6 +268,7 @@ public class DicomServiceImpl implements DicomService {
                 HttpUtil.post(analysisPath, requestBody1);
             } catch (Exception e) {
                 log.error("调用病灶识别模型分析失败：accessionNumber：{}", accessionNumber);
+                dicomMapper.updateDicomGroupStatus(DicomStatus.FAILED.getCode(), accessionNumber);
             }
         });
 
@@ -277,6 +282,9 @@ public class DicomServiceImpl implements DicomService {
                 log.error("调用PCI评分模型分析失败：accessionNumber：{}", accessionNumber);
             }
         });
+
+        //将dicom状态改为”分析中“
+        dicomMapper.updateDicomGroupStatus(DicomStatus.PROCESSING.getCode(), accessionNumber);
 
         return ResponseResult.success("请求成功");
     }

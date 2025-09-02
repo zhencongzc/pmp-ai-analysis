@@ -53,7 +53,7 @@ public class DicomGroupDTO {
     private String modality;
     /**
      * 状态
-     * 0-未处理、1-分析完成、2-处理中、3-处理失败
+     * 对应的枚举类：DicomStatus
      */
     private Integer status;
     /**

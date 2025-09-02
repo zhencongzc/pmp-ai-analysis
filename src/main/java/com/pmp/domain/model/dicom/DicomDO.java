@@ -60,6 +60,11 @@ public class DicomDO {
      */
     private String modality;
     /**
+     * 状态
+     * 对应的枚举类：DicomStatus
+     */
+    private Integer status;
+    /**
      * 系列描述
      */
     private String seriesDescription;
