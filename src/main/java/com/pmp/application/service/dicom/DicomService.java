@@ -91,4 +91,10 @@ public interface DicomService {
      */
     ResponseResult<String> dicomAnalysisFeign(String accessionNumber);
 
+    /**
+     * 删除dimcom文件
+     *
+     * @param accessionNumber
+     */
+    ResponseResult<String> deleteDicom(String accessionNumber);
 }

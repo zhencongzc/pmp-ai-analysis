@@ -97,4 +97,11 @@ public interface DicomMapper {
      * @param accessionNumber
      */
     void updateDicomGroupStatus(@Param("status") Integer status, @Param("accessionNumber") String accessionNumber);
+
+    /**
+     * 删除Dicom组信息
+     *
+     * @param accessionNumber
+     */
+    void deleteDicom(String accessionNumber);
 }

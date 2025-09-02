@@ -173,11 +173,19 @@ public class CTModuleController {
     }
 
     /**
-     * 模型分析接口
+     * 智能分析按钮
      */
     @GetMapping("/dicom/analysis")
     public ResponseResult<String> dicomAnalysis(@RequestParam String accessionNumber) {
         return dicomService.dicomAnalysisFeign(accessionNumber);
+    }
+
+    /**
+     * 删除按钮
+     */
+    @GetMapping("/dicom/delete")
+    public ResponseResult<String> deleteDicom(@RequestParam String accessionNumber) {
+        return dicomService.deleteDicom(accessionNumber);
     }
 
     /**

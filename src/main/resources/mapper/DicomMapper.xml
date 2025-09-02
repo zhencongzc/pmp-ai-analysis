@@ -91,6 +91,12 @@
         WHERE accession_number = #{accessionNumber}
     </update>
 
+    <delete id="deleteDicom">
+        DELETE
+        FROM ct_dicom
+        WHERE accession_number = #{accessionNumber}
+    </delete>
+
     <select id="selectDicomBySopInstanceUid" parameterType="com.pmp.domain.model.dicom.DicomDO"
             resultType="com.pmp.domain.model.dicom.DicomDO">
         SELECT id,

@@ -288,4 +288,16 @@ public class DicomServiceImpl implements DicomService {
 
         return ResponseResult.success("请求成功");
     }
+
+    /**
+     * 删除dicom文件
+     *
+     * @param accessionNumber
+     * @return
+     */
+    @Override
+    public ResponseResult<String> deleteDicom(String accessionNumber) {
+        dicomMapper.deleteDicom(accessionNumber);
+        return ResponseResult.success();
+    }
 }
