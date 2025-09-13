@@ -46,10 +46,10 @@ public class DicomServiceImpl implements DicomService {
 
     @Value("${document.upload.path}")
     private String uploadPath;
-
+    @Value("${document.png.path}")
+    private String pngPath;
     @Value("${ai.model.analysis.path}")
     private String analysisPath;
-
     @Value("${ai.model.pci.path}")
     private String pciPath;
 
@@ -64,7 +64,13 @@ public class DicomServiceImpl implements DicomService {
      */
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public String saveDicom(MultipartFile file) throws IOException, DicomException {
+    public String saveDicom(MultipartFile file) throws Exception {
+        //校验文件格式
+        String fileName = FileUtil.getFileName(file, true);
+        if (!fileName.toLowerCase().endsWith(".dcm")) {
+            throw new RuntimeException("文件格式错误，请上传.dcm文件格式");
+        }
+
         InputStream is = file.getInputStream();
         byte[] data = StreamUtil.getCopyInputStream(is);
         //读取DICOM元数据
@@ -92,14 +98,15 @@ public class DicomServiceImpl implements DicomService {
         }
 
         //将dicom文件存储到服务器
-        String dicomPath = uploadPath + accessionNumber + "/" + FileUtil.getFileName(file, true);
+        String dicomPath = uploadPath + accessionNumber + "/" + fileName;
         StreamUtil.saveInputStreamToFile(new ByteArrayInputStream(data), dicomPath);
 
-        //先将处理后的dicom文件和png地址存储起来
+        // 处理后的dicom文件地址，目前采用吴霞的模型，不新生成dicom
         String dicomPathNew = uploadPath + accessionNumber + "/result/sc_dicom/" + accessionNumber + "_" + FileUtil.getFileName(file, false) + "_sc.dcm";
-        String pngPath = uploadPath + accessionNumber + "/result/sc_dicom/" + accessionNumber + "_" + FileUtil.getFileName(file, false) + "_sc.png";
+        // 吴霞模型输出png的地址
+        String pngPathNew = pngPath + accessionNumber + "/result/Result_" + FileUtil.getFileName(file, false) + ".png";
         dicomDO.setDicomPath(dicomPathNew);
-        dicomDO.setPngPath(pngPath);
+        dicomDO.setPngPath(pngPathNew);
         dicomDO.setStatus(DicomStatus.PENDING.getCode());
 
         //新增dicom数据

@@ -22,7 +22,7 @@ public interface DicomService {
      *
      * @param file
      */
-    String saveDicom(MultipartFile file) throws IOException, DicomException;
+    String saveDicom(MultipartFile file) throws Exception;
 
     /**
      * 查询dicom列表

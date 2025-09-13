@@ -73,7 +73,7 @@ public class CTModuleController {
         for (MultipartFile f : file) {
             try {
                 accessionNumber = dicomService.saveDicom(f);
-            } catch (IOException | DicomException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 return ResponseResult.error(ResponseCode.INTERNAL_SERVER_ERROR.getCode(), e.getMessage());
             }

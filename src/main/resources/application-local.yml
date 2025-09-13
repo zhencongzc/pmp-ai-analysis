@@ -21,11 +21,6 @@ spring:
       max-file-size: 1000MB
       max-request-size: 1000MB
 
-# redis相关
-redis.addrs: ${server.ip}:6379
-redis.passwd: 123456
-redis.cluster:
-
 # 日志相关
 logging:
   level:
@@ -39,7 +34,9 @@ logging:
 # 文件上传地址
 document:
   upload:
-    path: /opt/upload/
+    path: /mc/opt/PMPPredict/temp_data/dcm_uploads/
+  png:
+    path: /mc/opt/PMPPredict/
 
 # 模型地址
 ai:
