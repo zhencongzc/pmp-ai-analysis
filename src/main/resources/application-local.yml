@@ -36,16 +36,19 @@ document:
   upload:
     path: /mc/opt/PMPPredict/temp_data/dcm_uploads/
   png:
-    path: /mc/opt/PMPPredict/
+    path2: /mc/opt/PMPPredict/
+    path3: /mc/opt/PMPPredict_chang/
 
 # 模型地址
 ai:
   model:
     analysis:
-      path: http://192.168.5.126:8000/ct-module/dicom/analysis
+      choose: 3
+      path1: http://192.168.5.126:8001/ct-module/dicom/analysis
+      path2: http://192.168.5.126:8000/ct-module/dicom/analysis
+      path3: http://192.168.5.126:8002/ct-module/dicom/analysis
     pci:
       path: http://127.0.0.1:8509/genpci
-#      path: http://192.168.5.126:8509/genpci
 
 # 是否是开发环境
 isDev: true

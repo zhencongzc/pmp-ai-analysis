@@ -44,12 +44,51 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 public class DicomServiceImpl implements DicomService {
 
+    /**
+     * dicom源文件地址
+     */
     @Value("${document.upload.path}")
     private String uploadPath;
-    @Value("${document.png.path}")
-    private String pngPath;
-    @Value("${ai.model.analysis.path}")
-    private String analysisPath;
+
+    /**
+     * 模型2输出的图片地址（吴霞）
+     */
+    @Value("${document.png.path2}")
+    private String pngPath2;
+
+    /**
+     * 模型3输出的图片地址（常中豪）
+     */
+    @Value("${document.png.path3}")
+    private String pngPath3;
+
+    /**
+     * 目前启用的模型
+     */
+    @Value("${ai.model.analysis.choose}")
+    private Integer analysisChoose;
+
+    /**
+     * 模型1的调用地址（李奕成）
+     */
+    @Value("${ai.model.analysis.path1}")
+    private String analysisPath1;
+
+    /**
+     * 模型2的调用地址（吴霞）
+     */
+    @Value("${ai.model.analysis.path2}")
+    private String analysisPath2;
+
+    /**
+     * 模型3的调用地址（常中豪）
+     */
+    @Value("${ai.model.analysis.path3}")
+    private String analysisPath3;
+
+    /**
+     * PCI模型的调用地址（戎戈）
+     */
     @Value("${ai.model.pci.path}")
     private String pciPath;
 
@@ -89,7 +128,7 @@ public class DicomServiceImpl implements DicomService {
             patientMapper.insertPatient(patientDO);
         }
 
-        //将dicom数据转为对象，如果之前存储过就不再处理
+        // 将dicom数据转为对象，如果之前存储过就不再处理
         DicomDO dicomDO = DicomUtil.changeAttributesToDicom(attributes);
         DicomDO existDicom = dicomMapper.selectDicomBySopInstanceUid(dicomDO);
         String accessionNumber = dicomDO.getAccessionNumber();
@@ -97,21 +136,76 @@ public class DicomServiceImpl implements DicomService {
             return accessionNumber;
         }
 
-        //将dicom文件存储到服务器
+        // 将dicom文件存储到服务器
         String dicomPath = uploadPath + accessionNumber + "/" + fileName;
         StreamUtil.saveInputStreamToFile(new ByteArrayInputStream(data), dicomPath);
 
-        // 处理后的dicom文件地址，目前采用吴霞的模型，不新生成dicom
-        String dicomPathNew = uploadPath + accessionNumber + "/result/sc_dicom/" + accessionNumber + "_" + FileUtil.getFileName(file, false) + "_sc.dcm";
-        // 吴霞模型输出png的地址
-        String pngPathNew = pngPath + accessionNumber + "/result/Result_" + FileUtil.getFileName(file, false) + ".png";
+        // 处理后的dicom文件地址
+        String dicomPathNew = "";
+        if (analysisChoose == 1) {
+            dicomPathNew = uploadPath + accessionNumber + "/result/sc_dicom/" + accessionNumber + "_" + FileUtil.getFileName(file, false) + "_sc.png";
+        }
+
+        // 输出png的地址
+        String pngPathNew = "";
+        if (analysisChoose == 1) {
+            pngPathNew = uploadPath + accessionNumber + "/result/sc_dicom/" + accessionNumber + "_" + FileUtil.getFileName(file, false) + "_sc.png";
+        } else if (analysisChoose == 2) {
+            pngPathNew = pngPath2 + accessionNumber + "/result/Result_" + FileUtil.getFileName(file, false) + ".png";
+        } else if (analysisChoose == 3) {
+            pngPathNew = pngPath3 + accessionNumber + "/result/Result_" + FileUtil.getFileName(file, false) + ".png";
+        }
+
         dicomDO.setDicomPath(dicomPathNew);
         dicomDO.setPngPath(pngPathNew);
         dicomDO.setStatus(DicomStatus.PENDING.getCode());
-
         //新增dicom数据
         dicomMapper.insertDicom(dicomDO);
         return accessionNumber;
+    }
+
+    /**
+     * 调用模型分析dimcom文件
+     *
+     * @param accessionNumber
+     */
+    @Override
+    public ResponseResult<String> dicomAnalysisFeign(String accessionNumber) {
+        //病灶识别模型
+        Map<String, String> requestBody1 = Collections.singletonMap("dicomUrl", uploadPath + accessionNumber);
+        // 异步执行HTTP请求
+        CompletableFuture.runAsync(() -> {
+            try {
+                if (analysisChoose == 1) {
+                    HttpUtil.post(analysisPath1, requestBody1);
+                } else if (analysisChoose == 2) {
+                    HttpUtil.post(analysisPath2, requestBody1);
+                } else if (analysisChoose == 3) {
+                    HttpUtil.post(analysisPath3, requestBody1);
+                }
+            } catch (Exception e) {
+                log.error("调用病灶识别模型分析失败：accessionNumber：{}", accessionNumber);
+                dicomMapper.updateDicomGroupStatus(DicomStatus.FAILED.getCode(), accessionNumber);
+            }
+        });
+
+        //PCI评分模型
+        Map<String, String> requestBody2 = Collections.singletonMap("dcm_path", uploadPath + accessionNumber);
+        // 异步执行HTTP请求
+        CompletableFuture.runAsync(() -> {
+            try {
+                if (analysisChoose == 1) {
+                    HttpUtil.post(pciPath, requestBody2);
+                }
+            } catch (Exception e) {
+                log.error("调用PCI评分模型分析失败：accessionNumber：{}", accessionNumber);
+            }
+        });
+
+        //将dicom状态改为”分析中“
+        dicomMapper.updateDicomGroupStatus(DicomStatus.PROCESSING.getCode(), accessionNumber);
+
+        return ResponseResult.success("请求成功");
     }
 
     /**
@@ -261,42 +355,6 @@ public class DicomServiceImpl implements DicomService {
     }
 
     /**
-     * 调用模型分析dimcom文件
-     *
-     * @param accessionNumber
-     */
-    @Override
-    public ResponseResult<String> dicomAnalysisFeign(String accessionNumber) {
-        //病灶识别模型
-        Map<String, String> requestBody1 = Collections.singletonMap("dicomUrl", uploadPath + accessionNumber);
-        // 异步执行HTTP请求
-        CompletableFuture.runAsync(() -> {
-            try {
-                HttpUtil.post(analysisPath, requestBody1);
-            } catch (Exception e) {
-                log.error("调用病灶识别模型分析失败：accessionNumber：{}", accessionNumber);
-                dicomMapper.updateDicomGroupStatus(DicomStatus.FAILED.getCode(), accessionNumber);
-            }
-        });
-
-        //PCI评分模型
-        Map<String, String> requestBody2 = Collections.singletonMap("dcm_path", uploadPath + accessionNumber);
-        // 异步执行HTTP请求
-        CompletableFuture.runAsync(() -> {
-            try {
-                HttpUtil.post(pciPath, requestBody2);
-            } catch (Exception e) {
-                log.error("调用PCI评分模型分析失败：accessionNumber：{}", accessionNumber);
-            }
-        });
-
-        //将dicom状态改为”分析中“
-        dicomMapper.updateDicomGroupStatus(DicomStatus.PROCESSING.getCode(), accessionNumber);
-
-        return ResponseResult.success("请求成功");
-    }
-
-    /**
      * 删除dicom文件
      *
      * @param accessionNumber
@@ -304,6 +362,16 @@ public class DicomServiceImpl implements DicomService {
      */
     @Override
     public ResponseResult<String> deleteDicom(String accessionNumber) {
+        //从服务器删除dicom文件
+        File dicomDir = new File(uploadPath + accessionNumber);
+        if (dicomDir.exists() && dicomDir.isDirectory()) {
+            File[] files = dicomDir.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    file.delete();
+                }
+            }
+        }
         dicomMapper.deleteDicom(accessionNumber);
         return ResponseResult.success();
     }
