@@ -194,9 +194,7 @@ public class DicomServiceImpl implements DicomService {
         // 异步执行HTTP请求
         CompletableFuture.runAsync(() -> {
             try {
-                if (analysisChoose == 1) {
-                    HttpUtil.post(pciPath, requestBody2);
-                }
+                HttpUtil.post(pciPath, requestBody2);
             } catch (Exception e) {
                 log.error("调用PCI评分模型分析失败：accessionNumber：{}", accessionNumber);
             }
